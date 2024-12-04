@@ -1,0 +1,320 @@
+{
+    "version": 10,
+    "cmakeMinimumRequired": {
+        "major": 3,
+        "minor": 31,
+        "patch": 0
+    },
+    "configurePresets": [
+        {
+            "name": "base",
+            "description": "Sets default generator, compiler, build and install directories",
+            "hidden": true,
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build/${presetName}",
+            "cacheVariables": {
+                "CMAKE_CXX_COMPILER": "clang++"
+            }
+        },
+        {
+            "name": "Debug-windows-x86_64",
+            "inherits": [
+                "base"
+            ],
+            "architecture": {
+                "value": "x64",
+                "strategy": "external"
+            },
+            "warnings": {
+                "dev": true
+            },
+            "vendor": {
+                "microsoft.com/VisualStudioSettings/CMake/1.0": {
+                    "hostOS": "Windows"
+                }
+            },
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug"
+            }
+        },
+        {
+            "name": "Debug-windows-arm64",
+            "inherits": "base",
+            "architecture": {
+                "value": "arm64",
+                "strategy": "external"
+            },
+            "warnings": {
+                "dev": true
+            },
+            "vendor": {
+                "microsoft.com/VisualStudioSettings/CMake/1.0": {
+                    "hostOS": "Windows"
+                }
+            },
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug"
+            }
+        },
+        {
+            "name": "Debug-macos-x86_64",
+            "inherits": "base",
+            "architecture": {
+                "value": "x64",
+                "strategy": "external"
+            },
+            "warnings": {
+                "dev": true
+            },
+            "vendor": {
+                "microsoft.com/VisualStudioSettings/CMake/1.0": {
+                    "hostOS": "macOS"
+                }
+            },
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug"
+            }
+        },
+        {
+            "name": "Debug-macos-arm64",
+            "inherits": "base",
+            "architecture": {
+                "value": "arm64",
+                "strategy": "external"
+            },
+            "warnings": {
+                "dev": true
+            },
+            "vendor": {
+                "microsoft.com/VisualStudioSettings/CMake/1.0": {
+                    "hostOS": "macOS"
+                }
+            },
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug"
+            }
+        },
+        {
+            "name": "Debug-linux-x86_64",
+            "inherits": "base",
+            "architecture": {
+                "value": "x64",
+                "strategy": "external"
+            },
+            "warnings": {
+                "dev": true
+            },
+            "vendor": {
+                "microsoft.com/VisualStudioSettings/CMake/1.0": {
+                    "hostOS": "Linux"
+                }
+            },
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug"
+            }
+        },
+        {
+            "name": "Debug-linux-arm64",
+            "inherits": "base",
+            "architecture": {
+                "value": "arm64",
+                "strategy": "external"
+            },
+            "warnings": {
+                "dev": true
+            },
+            "vendor": {
+                "microsoft.com/VisualStudioSettings/CMake/1.0": {
+                    "hostOS": "Linux"
+                }
+            },
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug"
+            }
+        },
+        {
+            "name": "Release-windows-x86_64",
+            "inherits": "base",
+            "architecture": {
+                "value": "x64",
+                "strategy": "external"
+            },
+            "vendor": {
+                "microsoft.com/VisualStudioSettings/CMake/1.0": {
+                    "hostOS": "Windows"
+                }
+            },
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release"
+            }
+        },
+        {
+            "name": "Release-windows-arm64",
+            "inherits": "base",
+            "architecture": {
+                "value": "arm64",
+                "strategy": "external"
+            },
+            "vendor": {
+                "microsoft.com/VisualStudioSettings/CMake/1.0": {
+                    "hostOS": "Windows"
+                }
+            },
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release"
+            }
+        },
+        {
+            "name": "Release-macos-x86_64",
+            "inherits": "base",
+            "architecture": {
+                "value": "x64",
+                "strategy": "external"
+            },
+            "vendor": {
+                "microsoft.com/VisualStudioSettings/CMake/1.0": {
+                    "hostOS": "macOS"
+                }
+            },
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release"
+            }
+        },
+        {
+            "name": "Release-macos-arm64",
+            "inherits": "base",
+            "architecture": {
+                "value": "arm64",
+                "strategy": "external"
+            },
+            "vendor": {
+                "microsoft.com/VisualStudioSettings/CMake/1.0": {
+                    "hostOS": "macOS"
+                }
+            },
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release"
+            }
+        },
+        {
+            "name": "Release-linux-x86_64",
+            "inherits": "base",
+            "architecture": {
+                "value": "x64",
+                "strategy": "external"
+            },
+            "vendor": {
+                "microsoft.com/VisualStudioSettings/CMake/1.0": {
+                    "hostOS": "Linux"
+                }
+            },
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release"
+            }
+        },
+        {
+            "name": "Release-linux-arm64",
+            "inherits": "base",
+            "architecture": {
+                "value": "arm64",
+                "strategy": "external"
+            },
+            "vendor": {
+                "microsoft.com/VisualStudioSettings/CMake/1.0": {
+                    "hostOS": "Linux"
+                }
+            },
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release"
+            }
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "core-build",
+            "description": "Inherits environment from base configurePreset",
+            "configurePreset": "base",
+            "hidden": true,
+            "cleanFirst": true,
+            "inheritConfigureEnvironment": true
+        },
+        {
+            "name": "Debug-windows-x86_64",
+            "configurePreset": "Debug-windows-x86_64",
+            "inherits": "core-build",
+            "nativeToolOptions": [
+                "-v"
+            ]
+        },
+        {
+            "name": "Debug-windows-arm64",
+            "configurePreset": "Debug-windows-arm64",
+            "inherits": "core-build",
+            "nativeToolOptions": [
+                "-v"
+            ]
+        },
+        {
+            "name": "Debug-macos-x86_64",
+            "configurePreset": "Debug-macos-x86_64",
+            "inherits": "core-build",
+            "nativeToolOptions": [
+                "-v"
+            ]
+        },
+        {
+            "name": "Debug-macos-arm64",
+            "configurePreset": "Debug-macos-arm64",
+            "inherits": "core-build",
+            "nativeToolOptions": [
+                "-v"
+            ]
+        },
+        {
+            "name": "Debug-linux-x86_64",
+            "configurePreset": "Debug-linux-x86_64",
+            "inherits": "core-build",
+            "nativeToolOptions": [
+                "-v"
+            ]
+        },
+        {
+            "name": "Debug-linux-arm64",
+            "configurePreset": "Debug-linux-arm64",
+            "inherits": "core-build",
+            "nativeToolOptions": [
+                "-v"
+            ]
+        },
+        {
+            "name": "Release-windows-x86_64",
+            "configurePreset": "Release-windows-x86_64",
+            "inherits": "core-build"
+        },
+        {
+            "name": "Release-windows-arm64",
+            "configurePreset": "Release-windows-arm64",
+            "inherits": "core-build"
+        },
+        {
+            "name": "Release-macos-x86_64",
+            "configurePreset": "Release-macos-x86_64",
+            "inherits": "core-build"
+        },
+        {
+            "name": "Release-macos-arm64",
+            "configurePreset": "Release-macos-arm64",
+            "inherits": "core-build"
+        },
+        {
+            "name": "Release-linux-x86_64",
+            "configurePreset": "Release-linux-x86_64",
+            "inherits": "core-build"
+        },
+        {
+            "name": "Release-linux-arm64",
+            "configurePreset": "Release-linux-arm64",
+            "inherits": "core-build"
+        }
+    ]
+}
