@@ -11,9 +11,15 @@
             "description": "Sets default generator, compiler, build and install directories",
             "hidden": true,
             "generator": "Ninja",
-            "binaryDir": "${sourceDir}/build/${presetName}",
+            "binaryDir": "${sourceDir}/build/${hostSystemName}-$env{OSBitness}/$env{BuildType}",
+            "environment": {
+                "outDir": "bin"
+            },
             "cacheVariables": {
-                "CMAKE_CXX_COMPILER": "clang++"
+                "CMAKE_CXX_COMPILER": "clang++",
+                "CMAKE_ARCHIVE_OUTPUT_DIRECTORY": "$env{outDir}-int",
+                "CMAKE_LIBRARY_OUTPUT_DIRECTORY": "$env{outDir}",
+                "CMAKE_RUNTIME_OUTPUT_DIRECTORY": "$env{outDir}"
             }
         },
         {
@@ -35,6 +41,10 @@
             },
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Debug"
+            },
+            "environment": {
+                "OSBitness": "x64",
+                "buildType": "Debug"
             }
         },
         {
@@ -54,6 +64,10 @@
             },
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Debug"
+            },
+            "environment": {
+                "OSBitness": "arm64",
+                "buildType": "Debug"
             }
         },
         {
@@ -73,6 +87,10 @@
             },
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Debug"
+            },
+            "environment": {
+                "OSBitness": "x64",
+                "buildType": "Debug"
             }
         },
         {
@@ -92,6 +110,10 @@
             },
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Debug"
+            },
+            "environment": {
+                "OSBitness": "arm64",
+                "buildType": "Debug"
             }
         },
         {
@@ -111,6 +133,10 @@
             },
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Debug"
+            },
+            "environment": {
+                "OSBitness": "x64",
+                "buildType": "Debug"
             }
         },
         {
@@ -130,6 +156,10 @@
             },
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Debug"
+            },
+            "environment": {
+                "OSBitness": "arm64",
+                "buildType": "Debug"
             }
         },
         {
@@ -146,6 +176,10 @@
             },
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Release"
+            },
+            "environment": {
+                "OSBitness": "x64",
+                "buildType": "Release"
             }
         },
         {
@@ -162,6 +196,10 @@
             },
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Release"
+            },
+            "environment": {
+                "OSBitness": "arm64",
+                "buildType": "Release"
             }
         },
         {
@@ -178,6 +216,10 @@
             },
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Release"
+            },
+            "environment": {
+                "OSBitness": "x64",
+                "buildType": "Release"
             }
         },
         {
@@ -194,6 +236,10 @@
             },
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Release"
+            },
+            "environment": {
+                "OSBitness": "arm64",
+                "buildType": "Release"
             }
         },
         {
@@ -210,6 +256,10 @@
             },
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Release"
+            },
+            "environment": {
+                "OSBitness": "x64",
+                "buildType": "Release"
             }
         },
         {
@@ -226,6 +276,10 @@
             },
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Release"
+            },
+            "environment": {
+                "OSBitness": "arm64",
+                "buildType": "Release"
             }
         }
     ],
