@@ -17,6 +17,9 @@ set(CMAKE_STATIC_LIBRARY_PREFIX "")
 file(GLOB_RECURSE UNIFY_SRCS ${CMAKE_SOURCE_DIR}/Unify/src/**.cpp)
 file(GLOB_RECURSE EDITOR_SRCS ${CMAKE_SOURCE_DIR}/Editor/src/**.cpp)
 
+add_subdirectory(${CMAKE_SOURCE_DIR}/Unify/vendor/spdlog)
+add_subdirectory(${CMAKE_SOURCE_DIR}/Unify/vendor/glfw)
+
 add_library(
     UnifyEngine
     SHARED
@@ -30,7 +33,12 @@ target_include_directories(
     PRIVATE
     ${CMAKE_SOURCE_DIR}/Unify
     ${CMAKE_SOURCE_DIR}/Unify/include
-    ${CMAKE_SOURCE_DIR}/Unify/vendor/**/include
+)
+
+target_link_libraries(
+    UnifyEngine
+    spdlog::spdlog
+    glfw
 )
 
 add_executable(

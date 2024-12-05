@@ -1,0 +1,6 @@
+[submodule "Unify/vendor/glfw"]
+	path = Unify/vendor/glfw
+	url = https://github.com/glfw/glfw
+[submodule "Unify/vendor/spdlog"]
+	path = Unify/vendor/spdlog
+	url = https://github.com/gabime/spdlog
