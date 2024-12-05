@@ -29,6 +29,7 @@ target_include_directories(
     UnifyEngine
     PRIVATE
     ${CMAKE_SOURCE_DIR}/Unify
+    ${CMAKE_SOURCE_DIR}/Unify/include
     ${CMAKE_SOURCE_DIR}/Unify/vendor/**/include
 )
 

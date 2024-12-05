@@ -4,6 +4,7 @@
 
 namespace Unify
 {
+
     class UnifyApplication
     {
     public:
@@ -12,4 +13,5 @@ namespace Unify
 
         void Run();
     };
+
 }

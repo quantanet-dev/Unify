@@ -1,4 +1,7 @@
-#include <unify.h>
+#include <unpch.h>
+#include <core/core.h>
+#include <events/events.h>
+#include <events/windowEvents.h>
 
 namespace Unify
 {
@@ -8,7 +11,8 @@ namespace Unify
     void UnifyApplication::Run()
     {
         while (true)
-            ;
+        {
+        };
     };
 
 }
