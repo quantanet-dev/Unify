@@ -9,4 +9,4 @@ if globals.IsLinux():
     subprocess.call(["make", "-C", "{}".format("./solution-files/") , "config={}".format(globals.CONFIG)])
 
 if globals.IsMacos():
-    subprocess.call(["xcodebuild", "-project", "./{}/{}/{}.xcodeproj".format("project-files", globals.PROJECT_NAME, globals.PROJECT_NAME), "-configuration", "{}".format(globals.CONFIG)])
+    subprocess.call(["xcodebuild", "-project", "./{}/{}.xcodeproj".format("solution-files", globals.PROJECT_NAME), "-configuration", "{}".format(globals.CONFIG)])
