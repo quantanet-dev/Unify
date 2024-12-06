@@ -1,4 +1,7 @@
+workspaceDirectory = "solution-files/"
+
 workspace "unify2"
+    location(workspaceDirectory)
     startproject "unifyeditor2"
     architecture "x64"
 
@@ -8,11 +11,12 @@ workspace "unify2"
     }
 
 targetDirectory = "bin/%{cfg.buildcfg}/%{prj.name}"
-
 objectDirectory = "bin-obj/%{cfg.buildcfg}/%{prj.name}"
 
+projectDirectory = "project-files/%{prj.name}"
+
 project "unifyeditor2"
-    location "unifyeditor2"
+    location(projectDirectory)
     kind "ConsoleApp"
     language "C++"
     cppdialect "C++23"

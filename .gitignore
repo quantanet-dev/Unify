@@ -4,6 +4,8 @@
 bin*/
 logs/
 obj/
+solution-files/
+project-files/
 
 # Files
 *.user
