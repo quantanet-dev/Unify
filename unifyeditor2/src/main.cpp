@@ -1,8 +1,9 @@
-#include <iostream>
-#include "unify2/engine.h"
+
+namespace Unify2 {
+	__declspec(dllimport) void Print();
+}
 
 int main()
 {
-    unify2::GetInfo();
-    return 0;
+	Unify2::Print();
 }

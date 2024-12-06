@@ -7,16 +7,16 @@ PROJECT_NAME = "unifyeditor2"
 VERSION_MAJOR = 1
 VERSION_MINOR = 0
 CONFIG = "Debug"
+PLATFORM = sys.platform
+PLATFORM2 = platform.platform()
+ARCHITECTURE = platform.machine()
+
+if "microsoft" in PLATFORM2.lower():
+    PLATFORM = "windows"
+
 
 TOOLS_DIR = "tools"
-EXECUTABLE_PATH = "{}/bin/{}/{}".format(os.getcwd(), CONFIG, PROJECT_NAME, PROJECT_NAME)
-
-PLATFORM = sys.platform
-
-for x in platform.uname():
-    if "microsoft" in x.lower():
-        PLATFORM = "windows"
-        break
+EXECUTABLE_PATH = "{}/bin/{}-{}-{}/{}".format(os.getcwd(), CONFIG, PLATFORM, ARCHITECTURE, PROJECT_NAME)
 
 def IsWindows():
     return PLATFORM == "windows"

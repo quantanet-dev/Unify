@@ -1,38 +1,30 @@
-workspaceDirectory = "solution-files/"
-
 workspace "unify2"
-    location(workspaceDirectory)
-    startproject "unifyeditor2"
     architecture "x64"
+    startproject "unifyeditor2"
 
     configurations {
         "Debug",
         "Release"
     }
 
-targetDirectory = "bin/%{cfg.buildcfg}/%{prj.name}"
-objectDirectory = "bin-obj/%{cfg.buildcfg}/%{prj.name}"
-
-projectDirectory = "project-files/%{prj.name}"
+outputDir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 project "unify2"
-    location(projectDirectory)
-    kind "StaticLib"
+    location "unify2"
+    kind "SharedLib"
     language "C++"
     cppdialect "C++23"
-    staticruntime "On"
 
-    targetdir(targetDirectory)
-    objdir(objectDirectory)
+    targetdir("bin/" .. outputDir .. "/%{prj.name}")
+    objdir("bin-obj/" .. outputDir .. "/%{prj.name}")
 
     files {
-        "%{prj.name}/include/**.h",
         "%{prj.name}/src/**.h",
-        "%{prj.name}/src/**.cpp",
+        "%{prj.name}/src/**.cpp"
     }
 
     includedirs{
-        "%{prj.name}/include/unify2"
+        "%{prj.name}/src"
     }
 
     flags {
@@ -43,7 +35,8 @@ project "unify2"
         systemversion "latest"
 
         defines {
-            "UNIFY2_PLATFORM_WINDOWS"
+            "UNIFY2_PLATFORM_WINDOWS",
+            "UNIFY2_BUILD_DLL"
         }
     
     filter {"system:macosx", "configurations:*"}
@@ -76,36 +69,44 @@ project "unify2"
             "UNIFY2_CONFIG_RELEASE"
         }
 
+
 project "unifyeditor2"
-    location(projectDirectory)
+    location "unifyeditor2"
     kind "ConsoleApp"
     language "C++"
     cppdialect "C++23"
-    staticruntime "On"
     links "unify2"
 
-    targetdir(targetDirectory)
-    objdir(objectDirectory)
+    targetdir("bin/" .. outputDir .. "/%{prj.name}")
+    objdir("bin-obj/" .. outputDir .. "/%{prj.name}")
 
     files {
         "%{prj.name}/src/**.h",
-        "%{prj.name}/src/**.cpp",
+        "%{prj.name}/src/**.cpp"
     }
 
     includedirs{
-        "unify2/include",
+        "unify2/src"
     }
 
     flags {
         "FatalWarnings"
     }
 
-    filter {"system:windows", "configurations:*"}
-    systemversion "latest"
+    -- postbuildcommands {
+    --     ("{COPY} %{cfg.buildtarget.relpath} ../bin/" .. outputDir .. "/unifyeditor2")
+    -- }
 
-    defines {
-        "UNIFY2_PLATFORM_WINDOWS"
+    postbuildcommands {
+        ("{COPYFILE} %[bin/%{!outputDir}/unify2/unify2.dll] %[bin/%{!outputDir}/unifyeditor2/unify2.dll]")
     }
+
+    filter {"system:windows", "configurations:*"}
+        systemversion "latest"
+
+        defines {
+            "UNIFY2_PLATFORM_WINDOWS"
+        }
 
     filter {"system:macosx", "configurations:*"}
         xcodebuildsettings{
