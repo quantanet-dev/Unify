@@ -3,13 +3,21 @@ workspace "unify2"
     startproject "unifyeditor2"
 
     configurations {
-        "Debug-x64",
-        "Debug-arm64",
-        "Release-x64",
-        "Release-arm64",
+        "Debug-windows-x86_64",
+        "Debug-windows-arm64",
+        "Release-windows-x86_64",
+        "Release-windows-arm64",
+        "Debug-linux-x86_64",
+        "Debug-linux-arm64",
+        "Release-linux-x86_64",
+        "Release-linux-arm64",
+        "Debug-darwin-x86_64",
+        "Debug-darwin-arm64",
+        "Release-darwin-x86_64",
+        "Release-darwin-arm64",
     }
 
-outputDir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
+outputDir = "%{cfg.buildcfg}"
 
 project "unify2"
     location "unify2"
@@ -56,7 +64,7 @@ project "unify2"
             "UNIFY2_PLATFORM_LINUX"
         }
 
-    filter {"system:*", "configurations:Debug-x64"}
+    filter {"system:*", "configurations:Debug-windows-x86_64"}
         runtime "Debug"
         symbols "On"
         defines {
@@ -64,7 +72,7 @@ project "unify2"
             "UNIFY2_ARCH_X64"
         }
 
-    filter {"system:*", "configurations:Debug-arm64"}
+    filter {"system:*", "configurations:Debug-windows-arm64"}
         runtime "Debug"
         symbols "On"
         defines {
@@ -72,7 +80,7 @@ project "unify2"
             "UNIFY2_ARCH_ARM64"
         }
 
-    filter {"system:*", "configurations:Release-x64"}
+    filter {"system:*", "configurations:Release-windows-x86_64"}
         runtime "Release"
         symbols "Off"
         optimize "On"
@@ -81,7 +89,75 @@ project "unify2"
             "UNIFY2_ARCH_X64"
         }
 
-    filter {"system:*", "configurations:Release-arm64"}
+    filter {"system:*", "configurations:Release-windows-arm64"}
+        runtime "Release"
+        symbols "Off"
+        optimize "On"
+        defines {
+            "UNIFY2_CONFIG_RELEASE",
+            "UNIFY2_ARCH_ARM64"
+        }
+
+    filter {"system:*", "configurations:Debug-linux-x86_64"}
+        runtime "Debug"
+        symbols "On"
+        defines {
+            "UNIFY2_CONFIG_DEBUG",
+            "UNIFY2_ARCH_X64"
+        }
+
+    filter {"system:*", "configurations:Debug-linux-arm64"}
+        runtime "Debug"
+        symbols "On"
+        defines {
+            "UNIFY2_CONFIG_DEBUG",
+            "UNIFY2_ARCH_ARM64"
+        }
+
+    filter {"system:*", "configurations:Release-linux-x86_64"}
+        runtime "Release"
+        symbols "Off"
+        optimize "On"
+        defines {
+            "UNIFY2_CONFIG_RELEASE",
+            "UNIFY2_ARCH_X64"
+        }
+
+    filter {"system:*", "configurations:Release-linux-arm64"}
+        runtime "Release"
+        symbols "Off"
+        optimize "On"
+        defines {
+            "UNIFY2_CONFIG_RELEASE",
+            "UNIFY2_ARCH_ARM64"
+        }
+
+    filter {"system:*", "configurations:Debug-darwin-x86_64"}
+        runtime "Debug"
+        symbols "On"
+        defines {
+            "UNIFY2_CONFIG_DEBUG",
+            "UNIFY2_ARCH_X64"
+        }
+
+    filter {"system:*", "configurations:Debug-darwin-arm64"}
+        runtime "Debug"
+        symbols "On"
+        defines {
+            "UNIFY2_CONFIG_DEBUG",
+            "UNIFY2_ARCH_ARM64"
+        }
+
+    filter {"system:*", "configurations:Release-darwin-x86_64"}
+        runtime "Release"
+        symbols "Off"
+        optimize "On"
+        defines {
+            "UNIFY2_CONFIG_RELEASE",
+            "UNIFY2_ARCH_X64"
+        }
+
+    filter {"system:*", "configurations:Release-darwin-arm64"}
         runtime "Release"
         symbols "Off"
         optimize "On"
@@ -126,7 +202,7 @@ project "unifyeditor2"
         systemversion "latest"
 
         defines {
-            "UNIFY2_PLATFORM_WINDOWS",
+            "UNIFY2_PLATFORM_WINDOWS"
         }
     
     filter {"system:macosx", "configurations:*"}
@@ -144,7 +220,7 @@ project "unifyeditor2"
             "UNIFY2_PLATFORM_LINUX"
         }
 
-    filter {"system:*", "configurations:Debug-x64"}
+    filter {"system:*", "configurations:Debug-windows-x86_64"}
         runtime "Debug"
         symbols "On"
         defines {
@@ -152,7 +228,7 @@ project "unifyeditor2"
             "UNIFY2_ARCH_X64"
         }
 
-    filter {"system:*", "configurations:Debug-arm64"}
+    filter {"system:*", "configurations:Debug-windows-arm64"}
         runtime "Debug"
         symbols "On"
         defines {
@@ -160,7 +236,7 @@ project "unifyeditor2"
             "UNIFY2_ARCH_ARM64"
         }
 
-    filter {"system:*", "configurations:Release-x64"}
+    filter {"system:*", "configurations:Release-windows-x86_64"}
         runtime "Release"
         symbols "Off"
         optimize "On"
@@ -169,7 +245,75 @@ project "unifyeditor2"
             "UNIFY2_ARCH_X64"
         }
 
-    filter {"system:*", "configurations:Release-arm64"}
+    filter {"system:*", "configurations:Release-windows-arm64"}
+        runtime "Release"
+        symbols "Off"
+        optimize "On"
+        defines {
+            "UNIFY2_CONFIG_RELEASE",
+            "UNIFY2_ARCH_ARM64"
+        }
+
+    filter {"system:*", "configurations:Debug-linux-x86_64"}
+        runtime "Debug"
+        symbols "On"
+        defines {
+            "UNIFY2_CONFIG_DEBUG",
+            "UNIFY2_ARCH_X64"
+        }
+
+    filter {"system:*", "configurations:Debug-linux-arm64"}
+        runtime "Debug"
+        symbols "On"
+        defines {
+            "UNIFY2_CONFIG_DEBUG",
+            "UNIFY2_ARCH_ARM64"
+        }
+
+    filter {"system:*", "configurations:Release-linux-x86_64"}
+        runtime "Release"
+        symbols "Off"
+        optimize "On"
+        defines {
+            "UNIFY2_CONFIG_RELEASE",
+            "UNIFY2_ARCH_X64"
+        }
+
+    filter {"system:*", "configurations:Release-linux-arm64"}
+        runtime "Release"
+        symbols "Off"
+        optimize "On"
+        defines {
+            "UNIFY2_CONFIG_RELEASE",
+            "UNIFY2_ARCH_ARM64"
+        }
+
+    filter {"system:*", "configurations:Debug-darwin-x86_64"}
+        runtime "Debug"
+        symbols "On"
+        defines {
+            "UNIFY2_CONFIG_DEBUG",
+            "UNIFY2_ARCH_X64"
+        }
+
+    filter {"system:*", "configurations:Debug-darwin-arm64"}
+        runtime "Debug"
+        symbols "On"
+        defines {
+            "UNIFY2_CONFIG_DEBUG",
+            "UNIFY2_ARCH_ARM64"
+        }
+
+    filter {"system:*", "configurations:Release-darwin-x86_64"}
+        runtime "Release"
+        symbols "Off"
+        optimize "On"
+        defines {
+            "UNIFY2_CONFIG_RELEASE",
+            "UNIFY2_ARCH_X64"
+        }
+
+    filter {"system:*", "configurations:Release-darwin-arm64"}
         runtime "Release"
         symbols "Off"
         optimize "On"
