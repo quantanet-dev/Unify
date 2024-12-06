@@ -194,13 +194,12 @@ project "unifyeditor2"
     --     ("{COPY} %{cfg.buildtarget.relpath} ../bin/" .. outputDir .. "/unifyeditor2")
     -- }
 
-    postbuildcommands {
-        ("{COPYFILE} %[bin/%{!outputDir}/unify2/unify2.dll] %[bin/%{!outputDir}/unifyeditor2/unify2.dll]")
-    }
 
     filter {"system:windows", "configurations:*"}
         systemversion "latest"
-
+        postbuildcommands {
+            ("{COPYFILE} %[bin/%{!outputDir}/unify2/unify2.dll] %[bin/%{!outputDir}/unifyeditor2/unify2.dll]")
+        }
         defines {
             "UNIFY2_PLATFORM_WINDOWS"
         }
@@ -210,12 +209,14 @@ project "unifyeditor2"
             ["MACOSX_DEPLOYMENT_TARGET"] = "10.15",
             ["UseModernBuildSystem"] = "NO"
         }
-
         defines {
             "UNIFY2_PLATFORM_MACOS"
         }
 
     filter {"system:linux", "configurations:*"}
+        postbuildcommands {
+            ("{COPYFILE} %[bin/%{!outputDir}/unify2/unify2.so] %[bin/%{!outputDir}/unifyeditor2/unify2.so]")
+        }
         defines {
             "UNIFY2_PLATFORM_LINUX"
         }

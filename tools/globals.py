@@ -18,6 +18,7 @@ CONFIG = "{}-{}-{}".format(CONFIG, PLATFORM, ARCHITECTURE)
 
 TOOLS_DIR = "tools"
 EXECUTABLE_PATH = "{}/bin/{}/{}".format(os.getcwd(), CONFIG, PROJECT_NAME)
+LIB_PATH = "{}/bin/{}/{}".format(os.getcwd(), CONFIG, ENGINE_NAME)
 
 def IsWindows():
     return PLATFORM == "windows"

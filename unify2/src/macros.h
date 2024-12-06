@@ -11,6 +11,6 @@
 #define UNIFY2_API __attribute__((visibility("default"))) //GCC
 #endif
 #else 
-#define UNIFY2_API void(0)
+#define UNIFY2_API
 #endif
 

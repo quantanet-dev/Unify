@@ -12,5 +12,5 @@ if globals.IsLinux():
 
 if globals.IsMacos():
     ret = subprocess.call(["xcodebuild", "-project", "./{}/{}.xcodeproj".format(globals.PROJECT_NAME, globals.PROJECT_NAME), "-configuration", "{}".format(globals.CONFIG)])
-
+    ret = subprocess.call(["sudo", "-s", "cp", "-R", "{}/libunify2.dylib".format(os.curdir), "//usr/local/lib/"], cwd=globals.LIB_PATH)
 sys.exit(ret)
