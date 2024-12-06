@@ -1,5 +1,6 @@
 #pragma once
+#include "macros.h"
 
 namespace Unify2 {
-	__declspec(dllexport) void Print();
+	UNIFY2_API void Print();
 }

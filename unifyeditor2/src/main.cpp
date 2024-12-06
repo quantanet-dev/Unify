@@ -1,7 +1,4 @@
-
-namespace Unify2 {
-	__declspec(dllimport) void Print();
-}
+#include "engine.h"
 
 int main()
 {
