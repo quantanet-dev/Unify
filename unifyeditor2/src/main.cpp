@@ -1,12 +1,8 @@
 #include <iostream>
-#include <string>
+#include "unify2/engine.h"
 
 int main()
 {
-    std::cout << "Hello World!" << std::endl;
-    std::cout << "Paused! Press Enter to continue...";
-
-    std::string line;
-    std::getline(std::cin, line);
+    unify2::GetInfo();
     return 0;
 }
