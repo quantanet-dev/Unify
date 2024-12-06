@@ -1,3 +1,5 @@
+import os, sys, platform
+
 ENGINE_NAME = "unify2"
 PROJECT_NAME = "unifyeditor2"
 VERSION_MAJOR = 1
@@ -7,8 +9,8 @@ CONFIG = "Debug"
 TOOLS_DIR = "tools"
 EXECUTABLE_PATH = "{}/bin/{}/{}".format(os.getcwd(), globals.CONFIG, globals.PROJECT_NAME, globals.PROJECT_NAME)
 
-import os, sys, platform
 PLATFORM = sys.platform
+
 for x in platform.uname():
     if "microsoft" in x.lower():
         PLATFORM = "windows"
