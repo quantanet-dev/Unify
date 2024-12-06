@@ -1,4 +1,6 @@
-import os, sys, platform
+import os
+import sys
+import platform
 
 ENGINE_NAME = "unify2"
 PROJECT_NAME = "unifyeditor2"
