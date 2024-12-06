@@ -7,7 +7,7 @@ CONFIG = "Debug"
 TOOLS_DIR = "tools"
 EXECUTABLE_PATH = "{}/bin/{}/{}".format(os.getcwd(), globals.CONFIG, globals.PROJECT_NAME, globals.PROJECT_NAME)
 
-import sys, platform
+import os, sys, platform
 PLATFORM = sys.platform
 for x in platform.uname():
     if "microsoft" in x.lower():
