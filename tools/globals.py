@@ -9,7 +9,7 @@ VERSION_MINOR = 0
 CONFIG = "Debug"
 
 TOOLS_DIR = "tools"
-EXECUTABLE_PATH = "{}/bin/{}/{}".format(os.getcwd(), globals.CONFIG, globals.PROJECT_NAME, globals.PROJECT_NAME)
+EXECUTABLE_PATH = "{}/bin/{}/{}".format(os.getcwd(), CONFIG, PROJECT_NAME, PROJECT_NAME)
 
 PLATFORM = sys.platform
 
