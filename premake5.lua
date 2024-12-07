@@ -25,44 +25,40 @@ project "unify2"
     language "C++"
     cppdialect "C++23"
     characterset ("Unicode")
-    buildoptions {
-        "/utf-8"
-    }
 
     targetdir("bin/" .. outputDir .. "/%{prj.name}")
     objdir("bin-obj/" .. outputDir .. "/%{prj.name}")
 
     pchheader "un2pch.h"
-    pchsource "unify2/src/un2pch.cpp"
-
+    pchsource "%{prj.name}/src/un2pch.cpp"
+    
     files {
         "%{prj.name}/src/**.h",
         "%{prj.name}/src/**.cpp"
     }
-
+    
     includedirs{
         "%{prj.name}/src",
         "%{prj.name}/vendor/spdlog/include"
     }
-
+    
     flags {
         "FatalWarnings"
     }
-
+    
     filter {"system:windows", "configurations:*"}
         systemversion "latest"
 
+        buildoptions {
+            "/utf-8"
+        }
+    
         defines {
             "UNIFY2_PLATFORM_WINDOWS",
             "UNIFY2_BUILD_DLL"
         }
     
     filter {"system:macosx", "configurations:*"}
-        xcodebuildsettings{
-            ["MACOSX_DEPLOYMENT_TARGET"] = "10.15",
-            ["UseModernBuildSystem"] = "NO"
-        }
-
         defines {
             "UNIFY2_PLATFORM_MACOS"
         }
@@ -182,9 +178,6 @@ project "unifyeditor2"
     cppdialect "C++23"
     links "unify2"
     characterset ("Unicode")
-    buildoptions {
-        "/utf-8"
-    }
 
     targetdir("bin/" .. outputDir .. "/%{prj.name}")
     objdir("bin-obj/" .. outputDir .. "/%{prj.name}")
@@ -207,15 +200,14 @@ project "unifyeditor2"
         postbuildcommands {
             ("{COPYFILE} %[bin/%{!outputDir}/unify2/unify2.dll] %[bin/%{!outputDir}/unifyeditor2/unify2.dll]")
         }
+        buildoptions {
+            "/utf-8"
+        }
         defines {
             "UNIFY2_PLATFORM_WINDOWS"
         }
     
     filter {"system:macosx", "configurations:*"}
-        xcodebuildsettings{
-            ["MACOSX_DEPLOYMENT_TARGET"] = "10.15",
-            ["UseModernBuildSystem"] = "NO"
-        }
         defines {
             "UNIFY2_PLATFORM_MACOS"
         }

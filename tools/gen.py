@@ -12,7 +12,5 @@ if globals.IsLinux():
 
 if globals.IsMacos():
     ret = subprocess.call(["premake/premake5", "gmake2"])
-    if ret == 0:
-        ret = subprocess.call(["premake/premake5", "xcode4"])
 
 sys.exit(ret)
