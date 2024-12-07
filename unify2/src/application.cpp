@@ -1,9 +1,9 @@
-#include "un2pch.h"
+#include "realpch.h"
 #include "application.h"
 #include "core/logger.h"
 #include "log.h"
 
-namespace unify2{
+namespace unify2 {
 
 	void application::run() {
 		core::LogManager::Initialize();
