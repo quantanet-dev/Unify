@@ -29,8 +29,8 @@ project "unify2"
     targetdir("bin/" .. outputDir .. "/%{prj.name}")
     objdir("bin-obj/" .. outputDir .. "/%{prj.name}")
 
-    pchheader "realpch.h"
-    pchsource "%{prj.name}/src/un2pch.cpp"
+    pchheader "pch/un2pch.h"
+    pchsource "%{prj.name}/src/pch/un2pch.cpp"
     
     files {
         "%{prj.name}/src/**.h",

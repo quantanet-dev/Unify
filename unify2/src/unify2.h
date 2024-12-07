@@ -3,8 +3,8 @@
 // INCLUDES FOR EXTERNAL APPLICATIONS USING UNIFY2_API
 // 
 // --- ENTRY POINT ---
-#include "entrypoint.h"
+#include "application/entrypoint.h"
 // -------------------
 // -- API INCLUDES ---
-#include "application.h"
+#include "application/application.h"
 //
