@@ -1,0 +1,3 @@
+[submodule "unify2/vendor/spdlog"]
+	path = unify2/vendor/spdlog
+	url = https://github.com/gabime/spdlog

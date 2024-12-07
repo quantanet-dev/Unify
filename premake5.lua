@@ -24,9 +24,16 @@ project "unify2"
     kind "SharedLib"
     language "C++"
     cppdialect "C++23"
+    characterset ("Unicode")
+    buildoptions {
+        "/utf-8"
+    }
 
     targetdir("bin/" .. outputDir .. "/%{prj.name}")
     objdir("bin-obj/" .. outputDir .. "/%{prj.name}")
+
+    pchheader "un2pch.h"
+    pchsource "unify2/src/un2pch.cpp"
 
     files {
         "%{prj.name}/src/**.h",
@@ -34,7 +41,8 @@ project "unify2"
     }
 
     includedirs{
-        "%{prj.name}/src"
+        "%{prj.name}/src",
+        "%{prj.name}/vendor/spdlog/include"
     }
 
     flags {
@@ -173,6 +181,10 @@ project "unifyeditor2"
     language "C++"
     cppdialect "C++23"
     links "unify2"
+    characterset ("Unicode")
+    buildoptions {
+        "/utf-8"
+    }
 
     targetdir("bin/" .. outputDir .. "/%{prj.name}")
     objdir("bin-obj/" .. outputDir .. "/%{prj.name}")
@@ -181,7 +193,7 @@ project "unifyeditor2"
         "%{prj.name}/src/**.h",
         "%{prj.name}/src/**.cpp"
     }
-
+    
     includedirs{
         "unify2/src"
     }
@@ -189,11 +201,6 @@ project "unifyeditor2"
     flags {
         "FatalWarnings"
     }
-
-    -- postbuildcommands {
-    --     ("{COPY} %{cfg.buildtarget.relpath} ../bin/" .. outputDir .. "/unifyeditor2")
-    -- }
-
 
     filter {"system:windows", "configurations:*"}
         systemversion "latest"
