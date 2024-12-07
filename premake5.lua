@@ -213,9 +213,6 @@ project "unifyeditor2"
         }
 
     filter {"system:linux", "configurations:*"}
-        postbuildcommands {
-            ("{COPYFILE} %[bin/%{!outputDir}/unify2/unify2.so] %[bin/%{!outputDir}/unifyeditor2/unify2.so]")
-        }
         defines {
             "UNIFY2_PLATFORM_LINUX"
         }
