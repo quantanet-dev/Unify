@@ -1,6 +1,9 @@
 workspace "unify2"
     architecture "x64"
     startproject "unifyeditor2"
+    buildoptions {
+		"/MTd"
+	}
 
     configurations {
         "Debug-windows-x86_64",
@@ -19,12 +22,17 @@ workspace "unify2"
 
 outputDir = "%{cfg.buildcfg}"
 
+include "unify2/vendor/glfw"
+
 project "unify2"
     location "unify2"
     kind "SharedLib"
     language "C++"
     cppdialect "C++23"
     characterset ("Unicode")
+    links {
+        "glfw"
+    }
 
     targetdir("bin/" .. outputDir .. "/%{prj.name}")
     objdir("bin-obj/" .. outputDir .. "/%{prj.name}")
@@ -39,7 +47,8 @@ project "unify2"
     
     includedirs{
         "%{prj.name}/src",
-        "%{prj.name}/vendor/spdlog/include"
+        "%{prj.name}/vendor/spdlog/include",
+        "%{prj.name}/vendor/glfw/include"
     }
     
     flags {

@@ -1,24 +1,31 @@
 #include "pch/un2pch.h"
 #include "application.h"
 #include "core/logger.h"
+#include "core/window.h"
 #include "log.h"
 
 namespace unify2 {
 
+
+
 	void application::run() {
+		
+		
+		
+		// Initialize Managers
 		core::LogManager::Initialize();
-
-		LOG_TRACE("HELLO FROM UNIFY ENGINE!");
-		LOG_INFO("HELLO FROM UNIFY ENGINE!");
-		LOG_WARN("HELLO FROM UNIFY ENGINE!");
-		LOG_DEBUG("HELLO FROM UNIFY ENGINE!");
-		LOG_ERROR("HELLO FROM UNIFY ENGINE!");
-		LOG_FATAL("HELLO FROM UNIFY ENGINE!");
+		core::WindowManager::Initialize();
 
 
-		/*while (true);*/
+		// Update
 
+
+		// Shutdown Managers
+		core::WindowManager::Shutdown();
 		core::LogManager::Shutdown();
+
+
+
 	};
 
 }

@@ -1,3 +1,6 @@
 [submodule "unify2/vendor/spdlog"]
 	path = unify2/vendor/spdlog
 	url = https://github.com/gabime/spdlog
+[submodule "unify2/vendor/glfw"]
+	path = unify2/vendor/glfw
+	url = https://github.com/quantanet-dev/glfw
