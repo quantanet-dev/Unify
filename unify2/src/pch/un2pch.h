@@ -1,5 +1,3 @@
-#pragma once
-
 // Unify2 Platform Macros
 
 #ifdef UNIFY2_PLATFORM_WINDOWS
