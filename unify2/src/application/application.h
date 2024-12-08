@@ -3,15 +3,15 @@
 
 namespace unify2 {
 
-	class UNIFY2_API application {
+	class UNIFY2_API Application {
 	public:
-		application() = default;
-		virtual ~application() = default;
+		Application() = default;
+		virtual ~Application() = default;
 
 		void run();
 	};
 
 	// Defined in CLIENT
 
-	application* createInstance();
+	Application* CreateInstance();
 }

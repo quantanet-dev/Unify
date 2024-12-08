@@ -3,10 +3,10 @@
 #include "application.h"
 #include "pch/un2pch.h"
 
-extern unify2::application* unify2::createInstance();
+extern unify2::Application* unify2::CreateInstance();
 
 int main(int argc, char** argv) {
-	auto app = unify2::createInstance();
+	auto app = unify2::CreateInstance();
 	app->run();
 	delete app;
 }

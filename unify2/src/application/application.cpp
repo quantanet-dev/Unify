@@ -7,7 +7,7 @@ namespace unify2 {
 
 
 
-	void application::run() {
+	void Application::run() {
 
 		// Initialize engine core
 		core::Engine::Initialize();

@@ -3,13 +3,9 @@
 namespace unify2::core {
 
 	class WindowManager {
+		friend class Engine;
 	public:
-
 		static WindowManager& GetInstance();
-
-		static bool Initialize();
-		static void Update();
-		static void Shutdown();
 
 		WindowManager(const WindowManager&) = delete;
 		WindowManager& operator=(const WindowManager&) = delete;
@@ -17,6 +13,10 @@ namespace unify2::core {
 	private:
 		WindowManager() = default;
 		~WindowManager() = default;
+
+		static bool Initialize();
+		static void Shutdown();
+		static void Update();
 	};
 
 }
