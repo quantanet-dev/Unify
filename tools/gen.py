@@ -16,7 +16,7 @@ if globals.IsLinux():
         if ret == 0:
             ret = subprocess.call(["chmod", "+x", "premake/premake5.linux"])
             if ret == 0:
-                ret = subprocess.call(["premake/premake5", "gmake2"])
+                ret = subprocess.call(["premake/premake5.linux", "gmake2"])
 
 if globals.IsMacos():
     ret = subprocess.call(["git", "submodule", "init"])
