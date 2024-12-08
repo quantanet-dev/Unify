@@ -1,7 +1,7 @@
 #include "pch/un2pch.h"
 #include "events.h"
 
-namespace unify2::core {
+namespace unify::core {
 
     std::map<EventType, std::string> EventTypeToString = {
     {EventType::None, "None"},
@@ -56,19 +56,19 @@ namespace unify2::core {
     };
 
     bool EventManager::AddEventToQueue(std::shared_ptr<Event> event) {
-       /* std::string str = GetEventTypeToString(event->m_Type);
-        LOG_TRACE(str);*/
+        /* std::string str = GetEventTypeToString(event->m_Type);
+         LOG_TRACE(str);*/
         m_EventsQueue.push_back(event);
         return true;
     }
 
     bool EventManager::ProccessEventQueue() {
-         for (std::shared_ptr<Event> event : m_EventsQueue) {
-             event->m_CallbackFunc();
-             event->m_IsHandled = true;
-         }
-         m_EventsQueue.clear();
-         return true;
+        for (std::shared_ptr<Event> event : m_EventsQueue) {
+            event->m_CallbackFunc();
+            event->m_IsHandled = true;
+        }
+        m_EventsQueue.clear();
+        return true;
     }
 
 }

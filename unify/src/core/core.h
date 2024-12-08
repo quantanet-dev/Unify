@@ -2,10 +2,10 @@
 
 #include "application/application.h"
 
-namespace unify2::core {
+namespace unify::core {
 
     class Engine {
-        friend class unify2::Application;
+        friend class unify::Application;
         friend class WindowManager;
     public:
         static Engine& GetInstance();

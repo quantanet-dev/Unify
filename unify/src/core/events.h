@@ -2,7 +2,7 @@
 #include "pch/un2pch.h"
 #include "log.h"
 
-namespace unify2::core {
+namespace unify::core {
 
     enum class EventType {
         None,

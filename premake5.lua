@@ -1,5 +1,5 @@
-workspace "unify2"
-    startproject "unifyeditor2"
+workspace "unify"
+    startproject "unifyeditor"
 
     configurations {
         "Debug-windows-x86_64",
@@ -21,10 +21,10 @@ workspace "unify2"
 
 outputDir = "%{cfg.buildcfg}"
 
-include "unify2/vendor/glfw"
+include "unify/vendor/glfw"
 
-project "unify2"
-    location "unify2"
+project "unify"
+    location "unify"
     kind "SharedLib"
     language "C++"
     cppdialect "C++23"
@@ -62,13 +62,13 @@ project "unify2"
         }
     
         defines {
-            "UNIFY2_PLATFORM_WINDOWS",
-            "UNIFY2_BUILD_DLL"
+            "UNIFY_PLATFORM_WINDOWS",
+            "UNIFY_BUILD_DLL"
         }
     
     filter {"system:macosx", "configurations:*"}
         defines {
-            "UNIFY2_PLATFORM_MACOS"
+            "UNIFY_PLATFORM_MACOS"
         }
         links {
             "/System/Library/Frameworks/Cocoa.framework",
@@ -80,23 +80,23 @@ project "unify2"
 
     filter {"system:linux", "configurations:*"}
         defines {
-            "UNIFY2_PLATFORM_LINUX"
+            "UNIFY_PLATFORM_LINUX"
         }
 
     filter {"system:*", "configurations:Debug-windows-x86_64"}
         runtime "Debug"
         symbols "On"
         defines {
-            "UNIFY2_CONFIG_DEBUG",
-            "UNIFY2_ARCH_X64"
+            "UNIFY_CONFIG_DEBUG",
+            "UNIFY_ARCH_X64"
         }
 
     filter {"system:*", "configurations:Debug-windows-arm64"}
         runtime "Debug"
         symbols "On"
         defines {
-            "UNIFY2_CONFIG_DEBUG",
-            "UNIFY2_ARCH_ARM64"
+            "UNIFY_CONFIG_DEBUG",
+            "UNIFY_ARCH_ARM64"
         }
 
     filter {"system:*", "configurations:Release-windows-x86_64"}
@@ -104,8 +104,8 @@ project "unify2"
         symbols "Off"
         optimize "On"
         defines {
-            "UNIFY2_CONFIG_RELEASE",
-            "UNIFY2_ARCH_X64"
+            "UNIFY_CONFIG_RELEASE",
+            "UNIFY_ARCH_X64"
         }
 
     filter {"system:*", "configurations:Release-windows-arm64"}
@@ -113,24 +113,24 @@ project "unify2"
         symbols "Off"
         optimize "On"
         defines {
-            "UNIFY2_CONFIG_RELEASE",
-            "UNIFY2_ARCH_ARM64"
+            "UNIFY_CONFIG_RELEASE",
+            "UNIFY_ARCH_ARM64"
         }
 
     filter {"system:*", "configurations:Debug-linux-x86_64"}
         runtime "Debug"
         symbols "On"
         defines {
-            "UNIFY2_CONFIG_DEBUG",
-            "UNIFY2_ARCH_X64"
+            "UNIFY_CONFIG_DEBUG",
+            "UNIFY_ARCH_X64"
         }
 
     filter {"system:*", "configurations:Debug-linux-arm64"}
         runtime "Debug"
         symbols "On"
         defines {
-            "UNIFY2_CONFIG_DEBUG",
-            "UNIFY2_ARCH_ARM64"
+            "UNIFY_CONFIG_DEBUG",
+            "UNIFY_ARCH_ARM64"
         }
 
     filter {"system:*", "configurations:Release-linux-x86_64"}
@@ -138,8 +138,8 @@ project "unify2"
         symbols "Off"
         optimize "On"
         defines {
-            "UNIFY2_CONFIG_RELEASE",
-            "UNIFY2_ARCH_X64"
+            "UNIFY_CONFIG_RELEASE",
+            "UNIFY_ARCH_X64"
         }
 
     filter {"system:*", "configurations:Release-linux-arm64"}
@@ -147,16 +147,16 @@ project "unify2"
         symbols "Off"
         optimize "On"
         defines {
-            "UNIFY2_CONFIG_RELEASE",
-            "UNIFY2_ARCH_ARM64"
+            "UNIFY_CONFIG_RELEASE",
+            "UNIFY_ARCH_ARM64"
         }
 
     filter {"system:*", "configurations:Debug-darwin-universal"}
         runtime "Debug"
         symbols "On"
         defines {
-            "UNIFY2_CONFIG_DEBUG",
-            "UNIFY2_ARCH_UNIVERSAL"
+            "UNIFY_CONFIG_DEBUG",
+            "UNIFY_ARCH_UNIVERSAL"
         }
 
     filter {"system:*", "configurations:Release-darwin-universal"}
@@ -164,16 +164,16 @@ project "unify2"
         symbols "Off"
         optimize "On"
         defines {
-            "UNIFY2_CONFIG_RELEASE",
-            "UNIFY2_ARCH_UNIVERSAL"
+            "UNIFY_CONFIG_RELEASE",
+            "UNIFY_ARCH_UNIVERSAL"
         }
 
-project "unifyeditor2"
-    location "unifyeditor2"
+project "unifyeditor"
+    location "unifyeditor"
     kind "ConsoleApp"
     language "C++"
     cppdialect "C++23"
-    links "unify2"
+    links "unify"
     characterset ("Unicode")
 
     targetdir("bin/" .. outputDir .. "/%{prj.name}")
@@ -185,7 +185,7 @@ project "unifyeditor2"
     }
     
     includedirs{
-        "unify2/src"
+        "unify/src"
     }
 
     flags {
@@ -195,39 +195,39 @@ project "unifyeditor2"
     filter {"system:windows", "configurations:*"}
         systemversion "latest"
         postbuildcommands {
-            ("{COPYFILE} %[bin/%{!outputDir}/unify2/unify2.dll] %[bin/%{!outputDir}/unifyeditor2/unify2.dll]")
+            ("{COPYFILE} %[bin/%{!outputDir}/unify/unify.dll] %[bin/%{!outputDir}/unifyeditor/unify.dll]")
         }
         buildoptions {
             "/utf-8"
         }
         defines {
-            "UNIFY2_PLATFORM_WINDOWS"
+            "UNIFY_PLATFORM_WINDOWS"
         }
     
     filter {"system:macosx", "configurations:*"}
         defines {
-            "UNIFY2_PLATFORM_MACOS"
+            "UNIFY_PLATFORM_MACOS"
         }
 
     filter {"system:linux", "configurations:*"}
         defines {
-            "UNIFY2_PLATFORM_LINUX"
+            "UNIFY_PLATFORM_LINUX"
         }
 
     filter {"system:*", "configurations:Debug-windows-x86_64"}
         runtime "Debug"
         symbols "On"
         defines {
-            "UNIFY2_CONFIG_DEBUG",
-            "UNIFY2_ARCH_X64"
+            "UNIFY_CONFIG_DEBUG",
+            "UNIFY_ARCH_X64"
         }
 
     filter {"system:*", "configurations:Debug-windows-arm64"}
         runtime "Debug"
         symbols "On"
         defines {
-            "UNIFY2_CONFIG_DEBUG",
-            "UNIFY2_ARCH_ARM64"
+            "UNIFY_CONFIG_DEBUG",
+            "UNIFY_ARCH_ARM64"
         }
 
     filter {"system:*", "configurations:Release-windows-x86_64"}
@@ -235,8 +235,8 @@ project "unifyeditor2"
         symbols "Off"
         optimize "On"
         defines {
-            "UNIFY2_CONFIG_RELEASE",
-            "UNIFY2_ARCH_X64"
+            "UNIFY_CONFIG_RELEASE",
+            "UNIFY_ARCH_X64"
         }
 
     filter {"system:*", "configurations:Release-windows-arm64"}
@@ -244,24 +244,24 @@ project "unifyeditor2"
         symbols "Off"
         optimize "On"
         defines {
-            "UNIFY2_CONFIG_RELEASE",
-            "UNIFY2_ARCH_ARM64"
+            "UNIFY_CONFIG_RELEASE",
+            "UNIFY_ARCH_ARM64"
         }
 
     filter {"system:*", "configurations:Debug-linux-x86_64"}
         runtime "Debug"
         symbols "On"
         defines {
-            "UNIFY2_CONFIG_DEBUG",
-            "UNIFY2_ARCH_X64"
+            "UNIFY_CONFIG_DEBUG",
+            "UNIFY_ARCH_X64"
         }
 
     filter {"system:*", "configurations:Debug-linux-arm64"}
         runtime "Debug"
         symbols "On"
         defines {
-            "UNIFY2_CONFIG_DEBUG",
-            "UNIFY2_ARCH_ARM64"
+            "UNIFY_CONFIG_DEBUG",
+            "UNIFY_ARCH_ARM64"
         }
 
     filter {"system:*", "configurations:Release-linux-x86_64"}
@@ -269,8 +269,8 @@ project "unifyeditor2"
         symbols "Off"
         optimize "On"
         defines {
-            "UNIFY2_CONFIG_RELEASE",
-            "UNIFY2_ARCH_X64"
+            "UNIFY_CONFIG_RELEASE",
+            "UNIFY_ARCH_X64"
         }
 
     filter {"system:*", "configurations:Release-linux-arm64"}
@@ -278,16 +278,16 @@ project "unifyeditor2"
         symbols "Off"
         optimize "On"
         defines {
-            "UNIFY2_CONFIG_RELEASE",
-            "UNIFY2_ARCH_ARM64"
+            "UNIFY_CONFIG_RELEASE",
+            "UNIFY_ARCH_ARM64"
         }
 
     filter {"system:*", "configurations:Debug-darwin-universal"}
         runtime "Debug"
         symbols "On"
         defines {
-            "UNIFY2_CONFIG_DEBUG",
-            "UNIFY2_ARCH_UNIVERSAL"
+            "UNIFY_CONFIG_DEBUG",
+            "UNIFY_ARCH_UNIVERSAL"
         }
 
     filter {"system:*", "configurations:Release-darwin-universal"}
@@ -295,6 +295,6 @@ project "unifyeditor2"
         symbols "Off"
         optimize "On"
         defines {
-            "UNIFY2_CONFIG_RELEASE",
-            "UNIFY2_ARCH_UNIVERSAL"
+            "UNIFY_CONFIG_RELEASE",
+            "UNIFY_ARCH_UNIVERSAL"
         }

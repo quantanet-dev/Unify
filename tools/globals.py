@@ -8,8 +8,8 @@ TOOLSET_VERSION_MAJOR = 2
 TOOLSET_VERSION_MINOR = 1
 
 # -- YOU MAY CHANGE THESE VARIABLES TO FIT YOUR PROJECT LAYOUT
-ENGINE_NAME = "unify2"
-PROJECT_NAME = "unifyeditor2"
+ENGINE_NAME = "unify"
+PROJECT_NAME = "unifyeditor"
 BUILD_CONFIG = "Debug" # Options: Debug, Release
 MSBUILD_PATH = "C:\\\\Program Files\\\\Microsoft Visual Studio\\\\2022\\\\Community\\\\MSBuild\\\\Current\\\\Bin\\\\MSBuild.exe"
 TOOLS_DIR = "tools"

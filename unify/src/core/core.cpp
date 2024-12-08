@@ -5,7 +5,7 @@
 #include "window.h"
 #include "events.h"
 
-namespace unify2::core {
+namespace unify::core {
 
     static Engine* m_Instance = NULL;
     static bool isRunning = false;
