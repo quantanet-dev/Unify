@@ -3,7 +3,7 @@ import globals, subprocess, sys
 ret = 0
 
 if globals.IsWindows():
-    ret = subprocess.call(["cmd.exe", "/c", "git submodule init || git submodule update"])
+    ret = subprocess.call(["cmd.exe", "/c", "git submodule init | git submodule update"])
     if ret == 0:
         ret = subprocess.call(["cmd.exe", "/c", "premake\\premake5", "gmake2"])
         if ret == 0:
