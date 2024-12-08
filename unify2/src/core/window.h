@@ -8,6 +8,7 @@ namespace unify2::core {
 		static WindowManager& GetInstance();
 
 		static bool Initialize();
+		static void Update();
 		static void Shutdown();
 
 		WindowManager(const WindowManager&) = delete;

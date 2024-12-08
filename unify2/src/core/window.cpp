@@ -1,5 +1,6 @@
 #include "pch/un2pch.h"
 #include "window.h"
+#include "core.h"
 #include "log.h"
 #include "GLFW/glfw3.h"
 
@@ -43,14 +44,20 @@ namespace unify2::core {
 
 		// Poll for window events & pass them to the event manager
 
+		return isInitialized;
+	}
+
+	void WindowManager::Update() {
+
 		if (m_Window != NULL) {
-			while (!glfwWindowShouldClose(m_Window)) {
-				glfwSwapBuffers(m_Window);
-				glfwPollEvents();
+			if (glfwWindowShouldClose(m_Window)) {
+				core::Engine::Shutdown();
 			}
+			glfwSwapBuffers(m_Window);
+			glfwPollEvents();
 		}
 
-		return isInitialized;
+
 	}
 
 	void WindowManager::Shutdown() {
