@@ -7,16 +7,25 @@
 
 namespace unify2::core {
 
+	bool m_MouseInWindow = false;
+
 	void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 	{
 		/*glViewport(0, 0, width, height);*/
 	}
 
+	void cursor_enter_callback(GLFWwindow* window, int entered)
+	{
+		(entered) ? m_MouseInWindow = true : m_MouseInWindow = false;
+	}
+
 	static void cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
 	{
-		Event::CreateEvent(EventType::MouseMoved, [xpos, ypos]() {
-			LOG_TRACE("Mouse Moved! {}, {}", xpos, ypos)
-		});
+		if (m_MouseInWindow) {
+			Event::CreateEvent(EventType::MouseMoved, [xpos, ypos]() {
+				LOG_TRACE("Mouse Moved! {}, {}", xpos, ypos)
+			});
+		}
 	}
 
 	void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
@@ -135,6 +144,7 @@ namespace unify2::core {
 		glfwSetWindowFocusCallback(m_Window, window_focus_callback);
 		glfwSetWindowSizeCallback(m_Window, window_size_callback);
 		glfwSetKeyCallback(m_Window, key_callback);
+		glfwSetCursorEnterCallback(m_Window, cursor_enter_callback);
 		glfwSetCursorPosCallback(m_Window, cursor_position_callback);
 		glfwSetMouseButtonCallback(m_Window, mouse_button_callback);
 		glfwSetScrollCallback(m_Window, scroll_callback);

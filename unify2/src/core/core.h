@@ -1,9 +1,11 @@
 #pragma once
 
+#include "application/application.h"
+
 namespace unify2::core {
 
     class Engine {
-        friend class Application;
+        friend class unify2::Application;
         friend class WindowManager;
     public:
         static Engine& GetInstance();
