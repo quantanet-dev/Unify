@@ -4,7 +4,7 @@ from tools import globals
 
 def menu():
     print("=======================")
-    print("Unify2 Build Tools v{}.{}".format(globals.VERSION_MAJOR, globals.VERSION_MINOR))
+    print("Unify2 Build Tools v{}.{}".format(globals.TOOLSET_VERSION_MAJOR, globals.TOOLSET_VERSION_MINOR))
     print("=======================\n")
     print("[1] Generate Project")
     print("[2] Build Executable")
@@ -56,7 +56,7 @@ else:
     for i in range(1, len (sys.argv)):
         cmd = sys.argv[i]
         print("\n=======================")
-        print("Unify2 Build Tools v{}.{}".format(globals.VERSION_MAJOR, globals.VERSION_MINOR))
+        print("Unify2 Build Tools v{}.{}".format(globals.TOOLSET_VERSION_MAJOR, globals.TOOLSET_VERSION_MINOR))
         print("=======================\n")
         if RunCommand(cmd) != 0:
             break
