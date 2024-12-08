@@ -1,9 +1,5 @@
 workspace "unify2"
-    architecture "x64"
     startproject "unifyeditor2"
-    buildoptions {
-		"/MTd"
-	}
 
     configurations {
         "Debug-windows-x86_64",
@@ -14,11 +10,14 @@ workspace "unify2"
         "Debug-linux-arm64",
         "Release-linux-x86_64",
         "Release-linux-arm64",
-        "Debug-darwin-x86_64",
-        "Debug-darwin-arm64",
-        "Release-darwin-x86_64",
-        "Release-darwin-arm64",
+        "Debug-darwin-universal",
+        "Release-darwin-universal",
     }
+
+    filter {"system:windows"}
+        buildoptions {
+            "/MTd"
+        }
 
 outputDir = "%{cfg.buildcfg}"
 
@@ -70,6 +69,13 @@ project "unify2"
     filter {"system:macosx", "configurations:*"}
         defines {
             "UNIFY2_PLATFORM_MACOS"
+        }
+        links {
+            "/System/Library/Frameworks/Cocoa.framework",
+            "/System/Library/Frameworks/OpenGL.framework",
+            "/System/Library/Frameworks/IOKit.framework",
+            "/System/Library/Frameworks/CoreVideo.framework",
+            "/System/Library/Frameworks/QuartzCore.framework",
         }
 
     filter {"system:linux", "configurations:*"}
@@ -145,40 +151,22 @@ project "unify2"
             "UNIFY2_ARCH_ARM64"
         }
 
-    filter {"system:*", "configurations:Debug-darwin-x86_64"}
+    filter {"system:*", "configurations:Debug-darwin-universal"}
         runtime "Debug"
         symbols "On"
         defines {
             "UNIFY2_CONFIG_DEBUG",
-            "UNIFY2_ARCH_X64"
+            "UNIFY2_ARCH_UNIVERSAL"
         }
 
-    filter {"system:*", "configurations:Debug-darwin-arm64"}
-        runtime "Debug"
-        symbols "On"
-        defines {
-            "UNIFY2_CONFIG_DEBUG",
-            "UNIFY2_ARCH_ARM64"
-        }
-
-    filter {"system:*", "configurations:Release-darwin-x86_64"}
+    filter {"system:*", "configurations:Release-darwin-universal"}
         runtime "Release"
         symbols "Off"
         optimize "On"
         defines {
             "UNIFY2_CONFIG_RELEASE",
-            "UNIFY2_ARCH_X64"
+            "UNIFY2_ARCH_UNIVERSAL"
         }
-
-    filter {"system:*", "configurations:Release-darwin-arm64"}
-        runtime "Release"
-        symbols "Off"
-        optimize "On"
-        defines {
-            "UNIFY2_CONFIG_RELEASE",
-            "UNIFY2_ARCH_ARM64"
-        }
-
 
 project "unifyeditor2"
     location "unifyeditor2"
@@ -294,36 +282,19 @@ project "unifyeditor2"
             "UNIFY2_ARCH_ARM64"
         }
 
-    filter {"system:*", "configurations:Debug-darwin-x86_64"}
+    filter {"system:*", "configurations:Debug-darwin-universal"}
         runtime "Debug"
         symbols "On"
         defines {
             "UNIFY2_CONFIG_DEBUG",
-            "UNIFY2_ARCH_X64"
+            "UNIFY2_ARCH_UNIVERSAL"
         }
 
-    filter {"system:*", "configurations:Debug-darwin-arm64"}
-        runtime "Debug"
-        symbols "On"
-        defines {
-            "UNIFY2_CONFIG_DEBUG",
-            "UNIFY2_ARCH_ARM64"
-        }
-
-    filter {"system:*", "configurations:Release-darwin-x86_64"}
+    filter {"system:*", "configurations:Release-darwin-universal"}
         runtime "Release"
         symbols "Off"
         optimize "On"
         defines {
             "UNIFY2_CONFIG_RELEASE",
-            "UNIFY2_ARCH_X64"
-        }
-
-    filter {"system:*", "configurations:Release-darwin-arm64"}
-        runtime "Release"
-        symbols "Off"
-        optimize "On"
-        defines {
-            "UNIFY2_CONFIG_RELEASE",
-            "UNIFY2_ARCH_ARM64"
+            "UNIFY2_ARCH_UNIVERSAL"
         }

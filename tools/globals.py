@@ -14,6 +14,9 @@ ARCHITECTURE = platform.machine()
 if "microsoft" in PLATFORM2.lower():
     PLATFORM = "windows"
 
+if "darwin" in PLATFORM.lower():
+    ARCHITECTURE = "universal"
+
 CONFIG = "{}-{}-{}".format(CONFIG, PLATFORM, ARCHITECTURE)
 
 TOOLS_DIR = "tools"
