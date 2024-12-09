@@ -3,6 +3,9 @@
 #include "core.h"
 #include "events.h"
 #include "log.h"
+#include "glad/gl.h"
+//#include "glad/vulkan.h"
+#define GLFW_INCLUDE_NONE
 #include "GLFW/glfw3.h"
 
 namespace unify::core {
@@ -11,7 +14,7 @@ namespace unify::core {
 
 	void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 	{
-		/*glViewport(0, 0, width, height);*/
+		glViewport(0, 0, width, height);
 	}
 
 	void cursor_enter_callback(GLFWwindow* window, int entered)
@@ -131,6 +134,14 @@ namespace unify::core {
 		if (m_Window == NULL) {
 			m_Window = glfwCreateWindow(640, 360, "", NULL, NULL);
 			glfwMakeContextCurrent(m_Window);
+
+			int version = gladLoadGL(glfwGetProcAddress);
+			if (version == 0) {
+				LOG_ERROR("Failed to initialize OpenGL context");
+			}
+			else {
+				LOG_INFO("Loaded OpenGL {}.{}", GLAD_VERSION_MAJOR(version), GLAD_VERSION_MINOR(version));
+			}
 		}
 
 		if (!m_Window) {
@@ -160,8 +171,10 @@ namespace unify::core {
 					Engine::Shutdown();
 					});
 			}
-			glfwSwapBuffers(m_Window);
 			glfwPollEvents();
+			glClearColor(0.f, .7f, 1, 1.0);
+			glClear(GL_COLOR_BUFFER_BIT);
+			glfwSwapBuffers(m_Window);
 		}
 
 	}
