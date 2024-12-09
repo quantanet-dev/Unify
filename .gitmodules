@@ -6,4 +6,4 @@
 	url = https://github.com/quantanet-dev/glfw
 [submodule "unify/vendor/glad"]
 	path = unify/vendor/glad
-	url = https://github.com/quantanet-dev/glad
+	url = https://github.com/quantanet-dev/glad_precompiled_vulkan13_opengl_41_core

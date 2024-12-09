@@ -22,6 +22,7 @@ workspace "unify"
 outputDir = "%{cfg.buildcfg}"
 
 include "unify/vendor/glfw"
+include "unify/vendor/glad"
 
 project "unify"
     location "unify"
@@ -30,7 +31,8 @@ project "unify"
     cppdialect "C++23"
     characterset ("Unicode")
     links {
-        "glfw"
+        "glfw",
+        "glad"
     }
 
     targetdir("bin/" .. outputDir .. "/%{prj.name}")
@@ -48,6 +50,7 @@ project "unify"
         "%{prj.name}/src",
         "%{prj.name}/vendor/spdlog/include",
         "%{prj.name}/vendor/glfw/include"
+        "%{prj.name}/vendor/glad/include"
     }
     
     flags {
