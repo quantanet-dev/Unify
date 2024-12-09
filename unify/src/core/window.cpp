@@ -2,11 +2,14 @@
 #include "window.h"
 #include "core.h"
 #include "events.h"
+#include "cmath"
 #include "log.h"
-#include "glad/gl.h"
 //#include "glad/vulkan.h"
 #define GLFW_INCLUDE_NONE
 #include "GLFW/glfw3.h"
+#include "glad/gl.h"
+
+#include "graphics/opengl.h"
 
 namespace unify::core {
 
@@ -126,23 +129,25 @@ namespace unify::core {
 
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
-		glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
+		glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+		glfwWindowHint(GLFW_DOUBLEBUFFER, GLFW_TRUE);
 
 		// Initialze GLFW
 		// TODO : Set window paramaters externally
 
-		if (m_Window == NULL) {
-			m_Window = glfwCreateWindow(640, 360, "", NULL, NULL);
-			glfwMakeContextCurrent(m_Window);
 
-			int version = gladLoadGL(glfwGetProcAddress);
-			if (version == 0) {
-				LOG_ERROR("Failed to initialize OpenGL context");
-			}
-			else {
-				LOG_INFO("Loaded OpenGL {}.{}", GLAD_VERSION_MAJOR(version), GLAD_VERSION_MINOR(version));
-			}
+		m_Window = glfwCreateWindow(1280, 720, "Unify Engine", NULL, NULL);
+		glfwMakeContextCurrent(m_Window);
+
+		int version = gladLoadGL(glfwGetProcAddress);
+		if (version == 0) {
+			LOG_ERROR("Failed to initialize OpenGL context");
 		}
+		else {
+			LOG_INFO("Loaded OpenGL {}.{}", GLAD_VERSION_MAJOR(version), GLAD_VERSION_MINOR(version));
+		}
+
 
 		if (!m_Window) {
 			return false;
@@ -163,7 +168,10 @@ namespace unify::core {
 		return isInitialized;
 	}
 
+
+
 	void WindowManager::Update() {
+		graphics::OpenGLRenderer renderer = graphics::OpenGLRenderer();
 
 		if (m_Window != NULL) {
 			if (glfwWindowShouldClose(m_Window)) {
@@ -171,10 +179,14 @@ namespace unify::core {
 					Engine::Shutdown();
 					});
 			}
-			glfwPollEvents();
-			glClearColor(0.f, .7f, 1, 1.0);
-			glClear(GL_COLOR_BUFFER_BIT);
+
+			glClearColor(0.07f, .13f, 0.17f, 1.0f);
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+			glUseProgram(renderer.shaderProgram);
+			renderer.Draw();
 			glfwSwapBuffers(m_Window);
+
+			glfwPollEvents();
 		}
 
 	}
