@@ -49,7 +49,7 @@ project "unify"
     includedirs{
         "%{prj.name}/src",
         "%{prj.name}/vendor/spdlog/include",
-        "%{prj.name}/vendor/glfw/include"
+        "%{prj.name}/vendor/glfw/include",
         "%{prj.name}/vendor/glad/include"
     }
     
