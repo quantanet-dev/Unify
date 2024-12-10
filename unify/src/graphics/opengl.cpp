@@ -1,76 +1,128 @@
 #include "pch/un2pch.h"
-
 #include "opengl.h"
+#include "glad/gl.h"
+#include "log.h"
 
-namespace unify::graphics {
+namespace unify::graphics::opengl {
 
-    // ------ Example shaders for debugging ------ //
-    // Vertex Shader source code
-    const char* vertexShaderSource = "#version 330 core\n"
-        "layout (location = 0) in vec3 aPos;\n"
-        "void main()\n"
-        "{\n"
-        "   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
-        "}\0";
-    //Fragment Shader source code
-    const char* fragmentShaderSource = "#version 330 core\n"
-        "out vec4 FragColor;\n"
-        "void main()\n"
-        "{\n"
-        "   FragColor = vec4(0.8f, 0.3f, 0.02f, 1.0f);\n"
-        "}\n\0";
+	std::string ReadFile(const char* filepath) {
+		std::ifstream file(filepath);
+		if (file) {
+			std::stringstream ss;
+			ss << file.rdbuf();
+			std::string content = ss.str();
+			return content;
+		}
+		LOG_ERROR("Can't open shader file!");
+		return "";
+	}
 
-    float vertices[] = {
-        -0.5f, -0.5f * float(sqrt(3)) / 3, 0.0f,
-        0.5f, -0.5f * float(sqrt(3)) / 3, 0.0f,
-        0.0f, 0.5f * float(sqrt(3)) * 2 / 3, 0.0f
-    };
+	void CreateShaderProgram(const char* vertexFilepath, const char* fragmentFilepath, GLuint& shaderProgram) {
 
-    // ------------------------------------------ //
+		std::string vertexCode = ReadFile(vertexFilepath);
+		std::string fragmentCode = ReadFile(fragmentFilepath);
+		const char* vertexSource = vertexCode.c_str();
+		const char* fragmentSource = fragmentCode.c_str();
 
-    OpenGLRenderer::OpenGLRenderer() {
+		GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
+		glShaderSource(vertexShader, 1, &vertexSource, NULL);
+		glCompileShader(vertexShader);
 
-        GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
-        glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
-        glCompileShader(vertexShader);
-        GLuint fragShader = glCreateShader(GL_FRAGMENT_SHADER);
-        glShaderSource(fragShader, 1, &fragmentShaderSource, NULL);
-        glCompileShader(fragShader);
+		GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+		glShaderSource(fragmentShader, 1, &fragmentSource, NULL);
+		glCompileShader(fragmentShader);
 
-        shaderProgram = glCreateProgram();
+		shaderProgram = glCreateProgram();
 
-        glAttachShader(shaderProgram, vertexShader);
-        glAttachShader(shaderProgram, fragShader);
+		glAttachShader(shaderProgram, vertexShader);
+		glAttachShader(shaderProgram, fragmentShader);
 
-        glLinkProgram(shaderProgram);
+		glLinkProgram(shaderProgram);
 
-        glDeleteShader(vertexShader);
-        glDeleteShader(fragShader);
+		glDeleteShader(vertexShader);
+		glDeleteShader(fragmentShader);
+	}
 
-        glGenVertexArrays(1, &VAO);
-        glGenBuffers(1, &VBO);
+	// Vertex Array Buffer //
 
-        glBindVertexArray(VAO);
+	VertexBuffer::VertexBuffer(const void* data, GLuint size)
+	{
+		glGenBuffers(1, &m_RendererID);
+		glBindBuffer(GL_ARRAY_BUFFER, m_RendererID);
+		glBufferData(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW);
+	}
 
-        glBindBuffer(GL_ARRAY_BUFFER, VBO);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+	VertexBuffer::~VertexBuffer()
+	{
+		glDeleteBuffers(1, &m_RendererID);
+	}
 
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-        glEnableVertexAttribArray(0);
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
-        glBindVertexArray(0);
+	void VertexBuffer::Bind() const
+	{
+		glBindBuffer(GL_ARRAY_BUFFER, m_RendererID);
+	}
 
-    }
+	void VertexBuffer::Unbind() const
+	{
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+	}
 
-    OpenGLRenderer::~OpenGLRenderer() {
-        glDeleteVertexArrays(1, &VAO);
-        glDeleteBuffers(1, &VBO);
-        glDeleteProgram(shaderProgram);
-    }
+	// Element Array Buffer //
 
-    void OpenGLRenderer::Draw() {
-        glBindVertexArray(VAO);
-        glDrawArrays(GL_TRIANGLES, 0, 3);
-    }
+	ElementBuffer::ElementBuffer(GLuint* data, GLuint count) : m_Count(count)
+	{
+		glGenBuffers(1, &m_RendererID);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_RendererID);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(GLuint), data, GL_STATIC_DRAW);
+	}
+
+	ElementBuffer::~ElementBuffer()
+	{
+		glDeleteBuffers(1, &m_RendererID);
+	}
+
+	void ElementBuffer::Bind() const
+	{
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_RendererID);
+	}
+
+	void ElementBuffer::Unbind() const
+	{
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	}
+
+	VertexArray::VertexArray()
+	{
+		glGenVertexArrays(1, &m_RendererID);
+	}
+
+	VertexArray::~VertexArray()
+	{
+		glDeleteVertexArrays(1, &m_RendererID);
+	}
+
+	void VertexArray::AddBuffer(const VertexBuffer& vBuffer, const VertexBufferLayout& vLayout)
+	{	
+		Bind();
+		vBuffer.Bind();
+		const auto& elements = vLayout.GetElements();
+		GLuint offset = 0;
+		for (GLuint i = 0; i < elements.size(); i++) {
+			const auto& element = elements[i];
+			glEnableVertexAttribArray(i);
+			glVertexAttribPointer(i, element.count, element.type, element.normalized, vLayout.GetStride(), (const void*)offset);
+			offset += element.count * sizeof(element.type);
+		}
+	}
+
+	void VertexArray::Bind() const
+	{
+		glBindVertexArray(m_RendererID);
+	}
+
+	void VertexArray::Unbind() const
+	{
+		glBindVertexArray(0);
+	}
 
 }

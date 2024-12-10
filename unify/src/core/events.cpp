@@ -62,7 +62,7 @@ namespace unify::core {
         return true;
     }
 
-    bool EventManager::ProccessEventQueue() {
+    bool EventManager::Update() {
         for (std::shared_ptr<Event> event : m_EventsQueue) {
             event->m_CallbackFunc();
             event->m_IsHandled = true;

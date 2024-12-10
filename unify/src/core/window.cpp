@@ -1,111 +1,17 @@
 #include "pch/un2pch.h"
 #include "window.h"
 #include "core.h"
-#include "events.h"
 #include "cmath"
 #include "log.h"
 //#include "glad/vulkan.h"
-#define GLFW_INCLUDE_NONE
-#include "GLFW/glfw3.h"
 #include "glad/gl.h"
-
+#include "windowCallbacks.h"
 #include "graphics/opengl.h"
 
 namespace unify::core {
 
-	bool m_MouseInWindow = false;
-
-	void framebuffer_size_callback(GLFWwindow* window, int width, int height)
-	{
+	void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
 		glViewport(0, 0, width, height);
-	}
-
-	void cursor_enter_callback(GLFWwindow* window, int entered)
-	{
-		(entered) ? m_MouseInWindow = true : m_MouseInWindow = false;
-	}
-
-	static void cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
-	{
-		if (m_MouseInWindow) {
-			Event::CreateEvent(EventType::MouseMoved, [xpos, ypos]() {
-				LOG_TRACE("Mouse Moved! {}, {}", xpos, ypos)
-				});
-		}
-	}
-
-	void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
-	{
-		Event::CreateEvent(EventType::MouseScrolled, [xoffset, yoffset]() {
-			LOG_TRACE("Mouse Scrolled! {}, {}", xoffset, yoffset)
-			});
-	}
-
-	void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
-	{
-		switch (action) {
-		case GLFW_PRESS:
-			Event::CreateEvent(EventType::MouseMoved, [button]() {
-				LOG_TRACE("Mouse Button Pressed! {}", button)
-				});
-			break;
-		case GLFW_RELEASE:
-			Event::CreateEvent(EventType::MouseMoved, [button]() {
-				LOG_TRACE("Mouse Button Released! {}", button)
-				});
-			break;
-		default:
-			break;
-		}
-
-	}
-
-	void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
-	{
-		switch (action) {
-		case GLFW_PRESS:
-			Event::CreateEvent(EventType::KeyPressed, [key, scancode]() {
-				LOG_TRACE("Key Pressed! {}, {}", key, scancode)
-				});
-			break;
-		case GLFW_RELEASE:
-			Event::CreateEvent(EventType::KeyReleased, [key, scancode]() {
-				LOG_TRACE("Key Released! {}, {}", key, scancode)
-				});
-			break;
-		default:
-			break;
-		}
-	}
-
-	void window_pos_callback(GLFWwindow* window, int xpos, int ypos)
-	{
-		Event::CreateEvent(EventType::WindowMove, [xpos, ypos]() {
-			LOG_TRACE("Window Moved! {}, {}", xpos, ypos)
-			});
-	}
-
-	void window_focus_callback(GLFWwindow* window, int focused)
-	{
-		if (focused)
-		{
-			Event::CreateEvent(EventType::WindowFocus, []() {
-				LOG_TRACE("Window Focused!")
-				});
-		}
-		else
-		{
-			Event::CreateEvent(EventType::WindowUnfocus, []() {
-				LOG_TRACE("Window Unfocused!")
-				});
-		}
-	}
-
-	void window_size_callback(GLFWwindow* window, int width, int height)
-	{
-		Event::CreateEvent(EventType::WindowResize, [width, height]() {
-			LOG_TRACE("Window Resized! {}, {}", width, height)
-			});
 	}
 
 	static WindowManager* m_Instance = NULL;
@@ -121,21 +27,15 @@ namespace unify::core {
 			m_Instance = new WindowManager();
 		}
 
-
-		// Initialize GLFW
 		glfwInit();
-
-		// Setup GLFW window hints
 
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
+#ifdef UNIFY_PLATFORM_MACOS
 		glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+#endif
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 		glfwWindowHint(GLFW_DOUBLEBUFFER, GLFW_TRUE);
-
-		// Initialze GLFW
-		// TODO : Set window paramaters externally
-
 
 		m_Window = glfwCreateWindow(1280, 720, "Unify Engine", NULL, NULL);
 		glfwMakeContextCurrent(m_Window);
@@ -146,11 +46,6 @@ namespace unify::core {
 		}
 		else {
 			LOG_INFO("Loaded OpenGL {}.{}", GLAD_VERSION_MAJOR(version), GLAD_VERSION_MINOR(version));
-		}
-
-
-		if (!m_Window) {
-			return false;
 		}
 
 		glfwSetWindowSizeLimits(m_Window, 640, 360, GLFW_DONT_CARE, GLFW_DONT_CARE);
@@ -168,10 +63,30 @@ namespace unify::core {
 		return isInitialized;
 	}
 
+	// Vertices coordinates
+	GLfloat vertices[] =
+	{
+		-0.5f, -0.5f * float(sqrt(3)) / 3, 0.0f, // Lower left corner
+		0.5f, -0.5f * float(sqrt(3)) / 3, 0.0f, // Lower right corner
+		0.0f, 0.5f * float(sqrt(3)) * 2 / 3, 0.0f, // Upper corner
+		-0.5f / 2, 0.5f * float(sqrt(3)) / 6, 0.0f, // Inner left
+		0.5f / 2, 0.5f * float(sqrt(3)) / 6, 0.0f, // Inner right
+		0.0f, -0.5f * float(sqrt(3)) / 3, 0.0f // Inner down
+	};
 
+	// Indices for vertices order
+	GLuint indices[] =
+	{
+		0, 3, 5, // Lower left triangle
+		3, 2, 4, // Upper triangle
+		5, 4, 1 // Lower right triangle
+	};
+
+	static GLuint openGLShaderProgram;
 
 	void WindowManager::Update() {
-		graphics::OpenGLRenderer renderer = graphics::OpenGLRenderer();
+
+		
 
 		if (m_Window != NULL) {
 			if (glfwWindowShouldClose(m_Window)) {
@@ -180,15 +95,34 @@ namespace unify::core {
 					});
 			}
 
+			graphics::opengl::CreateShaderProgram("shaders/vertexShader.glsl", "shaders/fragmentShader.glsl", openGLShaderProgram);
+
+			graphics::opengl::VertexArray vArray;
+			graphics::opengl::VertexBuffer vBuffer(vertices, sizeof(vertices));
+
+			graphics::opengl::VertexBufferLayout vLayout;
+			vLayout.Push<GLfloat>(3);
+			vArray.AddBuffer(vBuffer, vLayout);
+
+			graphics::opengl::ElementBuffer eBuffer(indices, sizeof(indices));
+
+			glUseProgram(0);
+			vArray.Unbind();
+			vBuffer.Unbind();
+			eBuffer.Unbind();
+
 			glClearColor(0.07f, .13f, 0.17f, 1.0f);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-			glUseProgram(renderer.shaderProgram);
-			renderer.Draw();
-			glfwSwapBuffers(m_Window);
 
+			glUseProgram(openGLShaderProgram);
+
+			vArray.Bind();
+			eBuffer.Bind();
+
+			glDrawElements(GL_TRIANGLES, 9, GL_UNSIGNED_INT, 0);
+			glfwSwapBuffers(m_Window);
 			glfwPollEvents();
 		}
-
 	}
 
 	void WindowManager::Shutdown() {

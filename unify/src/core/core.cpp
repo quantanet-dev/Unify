@@ -21,11 +21,13 @@ namespace unify::core {
 
         // Initialize Managers
         LogManager::Initialize();
-        LOG_TRACE("Log Manager Initialized...");
+        LOG_INFO("Log Manager Initialized...");
         EventManager::Initialize();
-        LOG_TRACE("Event Manager Initialized...");
+        LOG_INFO("Event Manager Initialized...");
         WindowManager::Initialize();
-        LOG_TRACE("Window Manager Initialized...");
+        LOG_INFO("Window Manager Initialized...");
+       /* RenderManager::Initialize();
+        LOG_INFO("Render Manager Initialized...");*/
 
         Run();
 
@@ -36,19 +38,22 @@ namespace unify::core {
 
         // Start main loop aka update
         while (isRunning) {
+            EventManager::Update();
             WindowManager::Update();
-            EventManager::ProccessEventQueue();
+           /* RenderManager::Update();*/
         }
     }
 
     void Engine::Shutdown() {
         isRunning = false;
         // Shutdown Managers
-        LOG_TRACE("Shutting down Window Manager...");
+      /*  LOG_INFO("Shutting down Render Manager...");
+        RenderManager::Shutdown();*/
+        LOG_INFO("Shutting down Window Manager...");
         WindowManager::Shutdown();
-        LOG_TRACE("Shutting down Event Manager...");
+        LOG_INFO("Shutting down Event Manager...");
         EventManager::Shutdown();
-        LOG_TRACE("Shutting down Log Manager...");
+        LOG_INFO("Shutting down Log Manager...");
         LogManager::Shutdown();
 
         // delete instance pointer

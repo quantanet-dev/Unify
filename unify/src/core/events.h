@@ -43,7 +43,7 @@ namespace unify::core {
         static bool Initialize();
         static void Shutdown();
         static bool AddEventToQueue(std::shared_ptr<Event> event);
-        static bool ProccessEventQueue();
+        static bool Update();
     };
 
 }
