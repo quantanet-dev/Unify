@@ -1,5 +1,6 @@
 #include "pch/un2pch.h"
 #include "events.h"
+#include "log.h"
 
 namespace unify::core {
 
@@ -30,9 +31,13 @@ namespace unify::core {
 
     static std::vector<std::shared_ptr<Event>> m_EventsQueue;
 
-    void EventManager::Initialize() {}
+    void EventManager::Initialize() {
+        LOG_INFO("Event Manager Initialized");
+    }
 
-    void EventManager::Shutdown() {}
+    void EventManager::Shutdown() {
+        LOG_INFO("Event Manager Shutting Down");
+    }
 
     std::string GetEventTypeToString(EventType type) {
         auto it = EventTypeToString.find(type);

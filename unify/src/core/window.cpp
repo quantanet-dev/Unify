@@ -10,8 +10,10 @@
 #include "glm/gtc/matrix_transform.hpp"
 // IMGUI
 #include "imgui.h"
-#include "imgui_impl_glfw.h"
-#include "imgui_impl_opengl3.h"
+#include "backends/imgui_impl_glfw.h"
+#include "backends/imgui_impl_opengl3.h"
+#include <thread>
+#include <chrono>
 
 namespace unify::core {
 
@@ -174,12 +176,13 @@ namespace unify::core {
 
 		// IMGUI -----------------
 
+		// Setup Dear ImGui context
 		IMGUI_CHECKVERSION();
 		ImGui::CreateContext();
 		ImGuiIO& io = ImGui::GetIO();
 		io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
 		io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
-		//io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;         // IF using Docking Branch
+		io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;         // IF using Docking Branch
 
 		// Setup Platform/Renderer backends
 		ImGui_ImplGlfw_InitForOpenGL(m_Window, true);          // Second param install_callback=true will install GLFW callbacks and chain to existing ones.
@@ -208,6 +211,7 @@ namespace unify::core {
 		vBuffer->Unbind();
 		eBuffer->Unbind();
 
+		LOG_INFO("Window Manager Initialized");
 	}
 
 	static float r = 0.0f;
@@ -229,23 +233,22 @@ namespace unify::core {
 		if (glfwWindowShouldClose(m_Window)) {
 			Event::CreateNewEvent(EventType::WindowClose, []() {
 				Engine::GetInstance().Shutdown();
-				});
+			});
 		}
-		else {
+		else if (!glfwWindowShouldClose(m_Window)) {
 
 			glfwPollEvents();
-
+			glClearColor(0.07f, .13f, 0.17f, 1.0f);
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 			// (Your code calls glfwPollEvents())
 			// ...
 			// Start the Dear ImGui frame
 			ImGui_ImplOpenGL3_NewFrame();
 			ImGui_ImplGlfw_NewFrame();
 			ImGui::NewFrame();
-			//ImGui::ShowDemoWindow(); // Show demo window! :)
+			ImGui::ShowDemoWindow(); // Show demo window! :)
 			// --------------------------------------------------
 
-			glClearColor(0.07f, .13f, 0.17f, 1.0f);
-			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 			texture->Bind();
 			shader->SetUniform4f("uColor", r, g, b, 1.0f);
@@ -280,8 +283,8 @@ namespace unify::core {
 			g += ginc;
 			b += binc;
 
-			ImGui::SliderFloat3("TranslationA", &translationA.x, 0.0f, (float)screenWidth);
-			ImGui::SliderFloat3("TranslationB", &translationB.x, 0.0f, (float)screenWidth);
+			/*ImGui::SliderFloat3("TranslationA", &translationA.x, 0.0f, (float)screenWidth);
+			ImGui::SliderFloat3("TranslationB", &translationB.x, 0.0f, (float)screenWidth);*/
 			// -----------------------------------------------------
 			// Rendering
 			// (Your code clears your framebuffer, renders your other stuff etc.)
@@ -296,12 +299,14 @@ namespace unify::core {
 	}
 
 	void WindowManager::Shutdown() {
+
+		LOG_INFO("Window Manager Shutting Down");
+
 		// IMGUI -----------------
 		ImGui_ImplOpenGL3_Shutdown();
 		ImGui_ImplGlfw_Shutdown();
 		ImGui::DestroyContext();
 		// -----------------------
-
 		glfwDestroyWindow(m_Window);
 		glfwTerminate();
 	}

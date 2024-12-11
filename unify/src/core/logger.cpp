@@ -20,11 +20,13 @@ namespace unify::core {
         logger->set_level(spdlog::level::trace);
         logger->flush_on(spdlog::level::trace);
         spdlog::register_logger(logger);
+        LOG_INFO("Log Manager Initialized");
     }
 
     void LogManager::Update(){}
 
     void LogManager::Shutdown() {
+        LOG_INFO("Log Manager Shutting Down");
         spdlog::shutdown();
     }
 }

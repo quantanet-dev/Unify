@@ -10,3 +10,7 @@
 [submodule "unify/vendor/glm"]
 	path = unify/vendor/glm
 	url = https://github.com/g-truc/glm
+[submodule "unify/vendor/imgui"]
+	path = unify/vendor/imgui
+	url = https://github.com/ocornut/imgui.git
+	branch = docking

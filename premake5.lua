@@ -32,7 +32,7 @@ project "unify"
     characterset ("Unicode")
     links {
         "glfw",
-        "glad"
+        "glad",
     }
 
     targetdir("bin/" .. outputDir .. "/%{prj.name}")
@@ -45,10 +45,10 @@ project "unify"
         "%{prj.name}/src/**.h",
         "%{prj.name}/src/**.cpp",
         "%{prj.name}/vendor/imgui/**.h",
-        "%{prj.name}/vendor/imgui/**.cpp",
+        "%{prj.name}/vendor/imgui/**.cpp"
 
     }
-    
+
     includedirs{
         "%{prj.name}/src",
         "%{prj.name}/vendor/spdlog/include",
@@ -176,6 +176,9 @@ project "unify"
             "UNIFY_CONFIG_RELEASE",
             "UNIFY_ARCH_UNIVERSAL"
         }
+
+    filter "files:**/vendor/imgui/**.cpp"
+        flags {"NoPCH"}
 
 project "unifyeditor"
     location "unifyeditor"

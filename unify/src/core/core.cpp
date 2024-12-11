@@ -4,6 +4,8 @@
 #include "events.h"
 #include "window.h"
 #include "renderer.h"
+#include <thread>
+#include <chrono>
 
 namespace unify::core {
 
@@ -53,7 +55,7 @@ namespace unify::core {
     void Engine::Shutdown() {
         isRunning = false;
         // loop through the managers vector in reverse and shutdown all of the managers
-        for (auto manager = m_Managers.rbegin(); manager != m_Managers.rend(); --manager) {
+        for (auto manager = m_Managers.rbegin(); manager != m_Managers.rend(); ++manager) {
             manager->get().Shutdown();
         }
 
