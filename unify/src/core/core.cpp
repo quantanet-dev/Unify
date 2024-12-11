@@ -9,7 +9,7 @@ namespace unify::core {
 
     static bool isRunning = false;
 
-    Engine& Engine::GetInstance() { 
+    Engine& Engine::GetInstance() {
         static Engine* m_Instance = new Engine;
         return *m_Instance;
     }
@@ -20,7 +20,7 @@ namespace unify::core {
 
     void Engine::Initialize() {
 
-       // Add managers to m_Managers vector
+        // Add managers to m_Managers vector
 
         AddManager(LogManager::GetInstance());
 
@@ -28,10 +28,10 @@ namespace unify::core {
 
         AddManager(WindowManager::GetInstance());
 
-       // Set isRunning flag to true;
+        // Set isRunning flag to true;
         isRunning = true;
 
-       // Initialize all of the managers within the engine class
+        // Initialize all of the managers within the engine class
         for (IManager& manager : m_Managers) {
             manager.Initialize();
         }
@@ -47,13 +47,13 @@ namespace unify::core {
                 manager.Update();
             }
         }
- 
+
     }
 
     void Engine::Shutdown() {
         isRunning = false;
         // loop through the managers vector in reverse and shutdown all of the managers
-        for (auto manager = m_Managers.rbegin(); manager != m_Managers.rend(); manager++) {
+        for (auto manager = m_Managers.rbegin(); manager != m_Managers.rend(); --manager) {
             manager->get().Shutdown();
         }
 

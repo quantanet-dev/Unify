@@ -43,7 +43,10 @@ project "unify"
     
     files {
         "%{prj.name}/src/**.h",
-        "%{prj.name}/src/**.cpp"
+        "%{prj.name}/src/**.cpp",
+        "%{prj.name}/vendor/imgui/**.h",
+        "%{prj.name}/vendor/imgui/**.cpp",
+
     }
     
     includedirs{
@@ -52,7 +55,8 @@ project "unify"
         "%{prj.name}/vendor/glfw/include",
         "%{prj.name}/vendor/glad/include",
         "%{prj.name}/vendor/stb_image/include",
-        "%{prj.name}/vendor/glm/"
+        "%{prj.name}/vendor/glm",
+        "%{prj.name}/vendor/imgui"
     }
     
     flags {

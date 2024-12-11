@@ -8,6 +8,10 @@
 #include "core/renderer.h"
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
+// IMGUI
+#include "imgui.h"
+#include "imgui_impl_glfw.h"
+#include "imgui_impl_opengl3.h"
 
 namespace unify::core {
 
@@ -109,10 +113,10 @@ namespace unify::core {
 
 	GLfloat vertices[] =
 	{
-		100.0f, 100.0f, 0.0f, 0.0f, // 0
-		200.0f, 100.0f, 1.0f, 0.0f, // 1
-		200.0f, 200.0f, 1.0f, 1.0f, // 2
-		100.0f, 200.0f, 0.0f, 1.0f // 3
+		-50.0f, -50.0f, 0.0f, 0.0f, // 0
+		 50.0f, -50.0f, 1.0f, 0.0f, // 1
+		 50.0f,  50.0f, 1.0f, 1.0f, // 2
+		-50.0f,  50.0f, 0.0f, 1.0f // 3
 	};
 
 	// Indices for vertices order
@@ -168,6 +172,21 @@ namespace unify::core {
 		glfwSetMouseButtonCallback(m_Window, mouse_button_callback);
 		glfwSetScrollCallback(m_Window, scroll_callback);
 
+		// IMGUI -----------------
+
+		IMGUI_CHECKVERSION();
+		ImGui::CreateContext();
+		ImGuiIO& io = ImGui::GetIO();
+		io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
+		io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+		//io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;         // IF using Docking Branch
+
+		// Setup Platform/Renderer backends
+		ImGui_ImplGlfw_InitForOpenGL(m_Window, true);          // Second param install_callback=true will install GLFW callbacks and chain to existing ones.
+		ImGui_ImplOpenGL3_Init();
+
+		// -----------------------
+
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
@@ -200,10 +219,10 @@ namespace unify::core {
 	static float ginc = 0.01f;
 
 	glm::mat4 proj = glm::ortho(0.0f, (float)screenWidth, 0.0f, (float)screenHeight);
-	glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(-100, 0, 0));
-	glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(200, 200, 0));
+	glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 0));
 
-	glm::mat4 mvp = proj * view * model;
+	glm::vec3 translationA(200, 200, 0);
+	glm::vec3 translationB(200, 200, 0);
 
 	void WindowManager::Update() {
 
@@ -212,46 +231,77 @@ namespace unify::core {
 				Engine::GetInstance().Shutdown();
 				});
 		}
+		else {
 
+			glfwPollEvents();
 
-		// shader->Bind();
-		shader->SetUniform4f("uColor", r, g, b, 1.0f);
-		shader->SetUniformMat4f("uMVP", mvp);
+			// (Your code calls glfwPollEvents())
+			// ...
+			// Start the Dear ImGui frame
+			ImGui_ImplOpenGL3_NewFrame();
+			ImGui_ImplGlfw_NewFrame();
+			ImGui::NewFrame();
+			//ImGui::ShowDemoWindow(); // Show demo window! :)
+			// --------------------------------------------------
 
-		texture->Bind();
-		shader->SetUniform1i("uTexture", 0);
+			glClearColor(0.07f, .13f, 0.17f, 1.0f);
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+			texture->Bind();
+			shader->SetUniform4f("uColor", r, g, b, 1.0f);
+			shader->SetUniform1i("uTexture", 0);
 
-		glClearColor(0.07f, .13f, 0.17f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		core::RenderManager::GetInstance().Draw(*vArray, *eBuffer, *shader);
+			glm::mat4 modelA = glm::translate(glm::mat4(1.0f), translationA);
+			glm::mat4 mvpA = proj * view * modelA;
+			shader->SetUniformMat4f("uMVP", mvpA);
+			core::RenderManager::GetInstance().Draw(*vArray, *eBuffer, *shader);
 
-		if (r > 1.f)
-			rinc = -0.01f;
-		else if (r < 0.0f)
-			rinc = 0.01f;
+			glm::mat4 modelB = glm::translate(glm::mat4(1.0f), translationB);
+			glm::mat4 mvpB = proj * view * modelB;
+			shader->SetUniformMat4f("uMVP", mvpB);
+			core::RenderManager::GetInstance().Draw(*vArray, *eBuffer, *shader);
 
-		if (g > 1.f)
-			ginc = -0.01f;
-		else if (g < 0.0f)
-			ginc = 0.01f;
+			if (r > 1.f)
+				rinc = -0.01f;
+			else if (r < 0.0f)
+				rinc = 0.01f;
 
-		if (b > 1.f)
-			binc = -0.01f;
-		else if (b < 0.0f)
-			binc = 0.01f;
+			if (g > 1.f)
+				ginc = -0.01f;
+			else if (g < 0.0f)
+				ginc = 0.01f;
 
-		r += rinc;
-		g += ginc;
-		b += binc;
+			if (b > 1.f)
+				binc = -0.01f;
+			else if (b < 0.0f)
+				binc = 0.01f;
 
-		glfwSwapBuffers(m_Window);
-		glfwPollEvents();
+			r += rinc;
+			g += ginc;
+			b += binc;
 
+			ImGui::SliderFloat3("TranslationA", &translationA.x, 0.0f, (float)screenWidth);
+			ImGui::SliderFloat3("TranslationB", &translationB.x, 0.0f, (float)screenWidth);
+			// -----------------------------------------------------
+			// Rendering
+			// (Your code clears your framebuffer, renders your other stuff etc.)
+			ImGui::Render();
+			ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+			// (Your code calls glfwSwapBuffers() etc.)
+
+			glfwSwapBuffers(m_Window);
+
+		}
 
 	}
 
 	void WindowManager::Shutdown() {
+		// IMGUI -----------------
+		ImGui_ImplOpenGL3_Shutdown();
+		ImGui_ImplGlfw_Shutdown();
+		ImGui::DestroyContext();
+		// -----------------------
+
 		glfwDestroyWindow(m_Window);
 		glfwTerminate();
 	}
