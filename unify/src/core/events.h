@@ -1,6 +1,6 @@
 #pragma once
-#include "pch/un2pch.h"
-#include "log.h"
+
+#include "core.h"
 
 namespace unify::core {
 
@@ -12,26 +12,26 @@ namespace unify::core {
     };
 
     class Event {
-        friend class WindowManager;
-        friend class EventManager;
     public:
         Event(EventType type, std::function<void()> callbackFunc) : m_Type(type), m_CallbackFunc(callbackFunc) {};
         ~Event() = default;
 
-        static void CreateEvent(EventType type, std::function<void()> callbackFunc);
+        static void CreateNewEvent(EventType type, std::function<void()> callbackFunc);
 
-    private:
         std::function<void()> m_CallbackFunc;
         bool m_IsHandled = false;
         EventType m_Type;
     };
 
-    class EventManager {
-        friend class Event;
+    class EventManager : IManager {
         friend class Engine;
-        friend class WindowManager;
     public:
         static EventManager& GetInstance();
+
+        void Initialize();
+        void Update();
+        void Shutdown();
+        static void AddEventToQueue(std::shared_ptr<Event> event);
 
         EventManager(const EventManager&) = delete;
         EventManager& operator=(const EventManager&) = delete;
@@ -39,11 +39,6 @@ namespace unify::core {
     private:
         EventManager() = default;
         ~EventManager() = default;
-
-        static bool Initialize();
-        static void Shutdown();
-        static bool AddEventToQueue(std::shared_ptr<Event> event);
-        static bool Update();
     };
 
 }

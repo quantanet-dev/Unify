@@ -5,7 +5,7 @@
 
 namespace unify::graphics::opengl {
 
-	std::string ReadFile(const char* filepath) {
+	std::string Shader::ReadFile(const char* filepath) {
 		std::ifstream file(filepath);
 		if (file) {
 			std::stringstream ss;
@@ -17,10 +17,10 @@ namespace unify::graphics::opengl {
 		return "";
 	}
 
-	void CreateShaderProgram(const char* vertexFilepath, const char* fragmentFilepath, GLuint& shaderProgram) {
+	GLuint Shader::CompileShader(const char* vertexShaderFilepath, const char* fragmentShaderFilepath) {
 
-		std::string vertexCode = ReadFile(vertexFilepath);
-		std::string fragmentCode = ReadFile(fragmentFilepath);
+		std::string vertexCode = ReadFile(vertexShaderFilepath);
+		std::string fragmentCode = ReadFile(fragmentShaderFilepath);
 		const char* vertexSource = vertexCode.c_str();
 		const char* fragmentSource = fragmentCode.c_str();
 
@@ -32,7 +32,7 @@ namespace unify::graphics::opengl {
 		glShaderSource(fragmentShader, 1, &fragmentSource, NULL);
 		glCompileShader(fragmentShader);
 
-		shaderProgram = glCreateProgram();
+		GLuint shaderProgram = glCreateProgram();
 
 		glAttachShader(shaderProgram, vertexShader);
 		glAttachShader(shaderProgram, fragmentShader);
@@ -41,6 +41,38 @@ namespace unify::graphics::opengl {
 
 		glDeleteShader(vertexShader);
 		glDeleteShader(fragmentShader);
+
+		return shaderProgram;
+	}
+
+
+	Shader::Shader(const char* vertexShaderFilepath, const char* fragmentShaderFilepath) : m_RendererID(0) {
+		m_RendererID = CompileShader(vertexShaderFilepath, fragmentShaderFilepath);
+	}
+
+	Shader::~Shader() {
+		glDeleteProgram(m_RendererID);
+	}
+
+	void Shader::Bind() const {
+		glUseProgram(m_RendererID);
+	}
+
+	void Shader::Unbind() const {
+		glUseProgram(0);
+	}
+
+	void Shader::SetUniform4f(const char* uniformName, float v0, float v1, float v2, float v3) {
+		GLuint location = GetUniformLocation(uniformName);
+		glUniform4f(location, v0, v1, v2, v3);
+	}
+
+	GLint Shader::GetUniformLocation(const char*& uniformName) {
+		GLint location = glGetUniformLocation(m_RendererID, uniformName);
+		if (location == -1) {
+			std::cout << "Warning: uniform " << uniformName << " doesn't exist\n";
+		}
+		return location;
 	}
 
 	// Vertex Array Buffer //
@@ -91,7 +123,9 @@ namespace unify::graphics::opengl {
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	}
 
-	VertexArray::VertexArray()
+	// Vertex Array
+
+	VertexArray::VertexArray() : m_RendererID(0)
 	{
 		glGenVertexArrays(1, &m_RendererID);
 	}

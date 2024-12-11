@@ -1,22 +1,27 @@
 #pragma once
+#include "pch/un2pch.h"
+#include "core.h"
+#include "events.h"
 
 namespace unify::core {
 
-	class WindowManager {
+	class WindowManager : public IManager {
 		friend class Engine;
 	public:
 		static WindowManager& GetInstance();
+
+		void Initialize();
+		void Update();
+		void Shutdown();
 
 		WindowManager(const WindowManager&) = delete;
 		WindowManager& operator=(const WindowManager&) = delete;
 
 	private:
-		WindowManager() = default;
+		WindowManager() {
+			std::cout << "Window Manager Created\n";
+		};
 		~WindowManager() = default;
-
-		static bool Initialize();
-		static void Shutdown();
-		static void Update();
 	};
 
 }

@@ -1,16 +1,39 @@
 #pragma once
+#include "pch/un2pch.h"
 
 #include "glad/gl.h"
 
 namespace unify::graphics::opengl {
 
-	void CreateShaderProgram(const char* vertexFilepath, const char* fragmentFilepath, GLuint& shaderProgram);
+	class Shader {
+	private:
+		GLuint m_RendererID;
+		// uniform caching
+	public:
+
+		GLuint GetRendererID() { return m_RendererID; }
+
+		Shader(const char* vertexShaderFilepath, const char* fragmentShaderFilepath);
+		~Shader();
+
+		void Bind() const;
+		void Unbind() const;
+
+		void SetUniform4f(const char* uniformName, float v0, float v1, float v2, float v3);
+	private:
+		std::string ReadFile(const char* filepath);
+		GLuint CompileShader(const char* vertexShaderFilepath, const char* fragmentShaderFilepath);
+		GLint GetUniformLocation(const char*& uniformName);
+	};
 
 	class VertexBuffer
 	{
 	private:
 		GLuint m_RendererID;
 	public:
+		
+		GLuint GetRendererID() { return m_RendererID; }
+
 		VertexBuffer(const void* data, GLuint size);
 		~VertexBuffer();
 
@@ -24,6 +47,9 @@ namespace unify::graphics::opengl {
 		GLuint m_RendererID;
 		GLuint m_Count;
 	public:
+		
+		GLuint GetRendererID() { return m_RendererID; }
+
 		ElementBuffer(GLuint* data, GLuint count);
 		~ElementBuffer();
 
@@ -77,6 +103,9 @@ namespace unify::graphics::opengl {
 	private:
 		GLuint m_RendererID;
 	public:
+
+		GLuint GetRendererID() { return m_RendererID; }
+
 		VertexArray();
 		~VertexArray();
 

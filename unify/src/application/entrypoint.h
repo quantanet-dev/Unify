@@ -1,7 +1,6 @@
 #pragma once
 
 #include "application.h"
-#include "pch/un2pch.h"
 
 extern unify::Application* unify::CreateInstance();
 

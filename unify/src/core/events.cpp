@@ -18,32 +18,21 @@ namespace unify::core {
     {EventType::KeyReleased, "KeyReleased"}
     };
 
-    void Event::CreateEvent(EventType type, std::function<void()> callbackFunc) {
+    void Event::CreateNewEvent(EventType type, std::function<void()> callbackFunc) {
         EventManager::AddEventToQueue(std::make_shared<Event>(type, callbackFunc));
     }
 
-    static EventManager* m_Instance = NULL;
-    EventManager& EventManager::GetInstance() { return *m_Instance; }
+   
+    EventManager& EventManager::GetInstance() {
+        static EventManager* m_Instance = new EventManager;
+        return *m_Instance;
+    }
 
     static std::vector<std::shared_ptr<Event>> m_EventsQueue;
 
-    bool EventManager::Initialize() {
+    void EventManager::Initialize() {}
 
-        bool isInitialized = true;
-
-        if (m_Instance == NULL) {
-            m_Instance = new EventManager();
-        }
-
-        return isInitialized;
-    }
-
-    void EventManager::Shutdown() {
-
-        delete m_Instance;
-        m_Instance = NULL;
-
-    }
+    void EventManager::Shutdown() {}
 
     std::string GetEventTypeToString(EventType type) {
         auto it = EventTypeToString.find(type);
@@ -55,20 +44,18 @@ namespace unify::core {
         }
     };
 
-    bool EventManager::AddEventToQueue(std::shared_ptr<Event> event) {
+    void EventManager::AddEventToQueue(std::shared_ptr<Event> event) {
         /* std::string str = GetEventTypeToString(event->m_Type);
          LOG_TRACE(str);*/
         m_EventsQueue.push_back(event);
-        return true;
     }
 
-    bool EventManager::Update() {
+    void EventManager::Update() {
         for (std::shared_ptr<Event> event : m_EventsQueue) {
             event->m_CallbackFunc();
             event->m_IsHandled = true;
         }
         m_EventsQueue.clear();
-        return true;
     }
 
 }

@@ -5,18 +5,13 @@
 
 namespace unify::core {
 
-    static LogManager* m_Instance = NULL;
+    LogManager& LogManager::GetInstance() { 
+        static LogManager* m_Instance = new LogManager;
+        return *m_Instance;
+    }
 
-    LogManager& LogManager::GetInstance() { return *m_Instance; }
-
-    bool LogManager::Initialize()
+    void LogManager::Initialize()
     {
-        bool isInitialized = true;
-
-        if (m_Instance == NULL) {
-            m_Instance = new LogManager();
-        }
-
         auto console = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
         console->set_pattern("%^[%Y-%m-%d %H:%M:%S] [%n]: %v%$");
 
@@ -25,18 +20,11 @@ namespace unify::core {
         logger->set_level(spdlog::level::trace);
         logger->flush_on(spdlog::level::trace);
         spdlog::register_logger(logger);
-
-        if (!spdlog::get(UNIFY_LOGGER_NAME)) {
-            return false;
-        }
-
-        return isInitialized;
     }
+
+    void LogManager::Update(){}
 
     void LogManager::Shutdown() {
         spdlog::shutdown();
-
-        delete m_Instance;
-        m_Instance = NULL;
     }
 }

@@ -1,11 +1,16 @@
 #pragma once
+#include "core.h"
 
 namespace unify::core {
 
-	class LogManager {
+	class LogManager : IManager {
 		friend class Engine;
 	public:
 		static LogManager& GetInstance();
+
+		void Initialize();
+		void Update();
+		void Shutdown();
 
 		LogManager(const LogManager&) = delete;
 		LogManager& operator=(const LogManager&) = delete;
@@ -13,9 +18,6 @@ namespace unify::core {
 	private:
 		LogManager() = default;
 		~LogManager() = default;
-
-		static bool Initialize();
-		static void Shutdown();
 	};
 
 }
