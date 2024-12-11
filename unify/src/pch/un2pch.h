@@ -1,8 +1,3 @@
-// Debug Macros
-#define _CRTDBG_MAP_ALLOC
-
-#include <crtdbg.h>
-
 // Unify2 Platform Macros
 
 #ifdef UNIFY_PLATFORM_WINDOWS

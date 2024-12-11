@@ -9,4 +9,4 @@ void main()
 {
 	vec4 texColor = texture(uTexture, v_TexCoords);
 	color = texColor - (uColor / 8);
-};
+}
