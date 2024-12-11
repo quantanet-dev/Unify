@@ -19,12 +19,32 @@ namespace unify::graphics::opengl {
 		void Bind() const;
 		void Unbind() const;
 
+		void SetUniform1i(const char* uniformName, int v0);
 		void SetUniform4f(const char* uniformName, float v0, float v1, float v2, float v3);
 	private:
 		std::string ReadFile(const char* filepath);
 		GLuint CompileShader(const char* vertexShaderFilepath, const char* fragmentShaderFilepath);
 		GLint GetUniformLocation(const char*& uniformName);
 	};
+
+	class Texture {
+	private:
+		GLuint m_RendererID;
+		const char* m_Filepath;
+		GLubyte* m_LocalBuffer;
+		GLint m_Width, m_Height, m_BPP;
+
+	public:
+		Texture(const char* filepath);
+		~Texture();
+
+		void Bind(GLuint slot = 0) const;
+		void Unbind() const;
+
+		inline int GetWidth() const { return m_Width; }
+		inline int GetHeight() const { return m_Height; }
+	};
+
 
 	class VertexBuffer
 	{

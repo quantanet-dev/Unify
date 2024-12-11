@@ -101,14 +101,12 @@ namespace unify::core {
 		return *m_Instance;
 	}
 
-	/*static GLuint openGLShaderProgram;*/
-
 	GLfloat vertices[] =
 	{
-	   -0.5f, -0.5f, 0.0f, // 0
-		0.5f, -0.5f, 0.0f, // 1
-		0.5f,  0.5f, 0.0f, // 2
-	   -0.5f,  0.5f, 0.0f, // 3
+	   -0.5f, -0.5f, 0.0f, 0.0f, // 0
+		0.5f, -0.5f, 1.0f, 0.0f, // 1
+		0.5f,  0.5f, 1.0f, 1.0f, // 2
+	   -0.5f,  0.5f, 0.0f, 1.0f // 3
 
 	};
 
@@ -120,6 +118,7 @@ namespace unify::core {
 	};
 
 	std::shared_ptr<graphics::opengl::Shader> shader;
+	std::shared_ptr<graphics::opengl::Texture> texture;
 	std::shared_ptr<graphics::opengl::VertexArray> vArray;
 	std::shared_ptr<graphics::opengl::VertexBuffer> vBuffer;
 	std::shared_ptr<graphics::opengl::VertexBufferLayout> vLayout;
@@ -136,8 +135,9 @@ namespace unify::core {
 #endif
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 		glfwWindowHint(GLFW_DOUBLEBUFFER, GLFW_TRUE);
+		glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
 
-		m_Window = glfwCreateWindow(1280, 720, "Unify Engine", NULL, NULL);
+		m_Window = glfwCreateWindow(800, 800, "Unify Engine", NULL, NULL);
 		glfwMakeContextCurrent(m_Window);
 
 		glfwSwapInterval(1);
@@ -150,8 +150,8 @@ namespace unify::core {
 			LOG_INFO("Loaded OpenGL {}.{}", GLAD_VERSION_MAJOR(version), GLAD_VERSION_MINOR(version));
 		}
 
-		glfwSetWindowSizeLimits(m_Window, 640, 360, GLFW_DONT_CARE, GLFW_DONT_CARE);
-		glfwSetWindowAspectRatio(m_Window, 16, 9);
+		glfwSetWindowSizeLimits(m_Window, 800, 800, GLFW_DONT_CARE, GLFW_DONT_CARE);
+		/*glfwSetWindowAspectRatio(m_Window, 4, 3);*/
 		glfwSetFramebufferSizeCallback(m_Window, framebuffer_size_callback);
 		glfwSetWindowPosCallback(m_Window, window_pos_callback);
 		glfwSetWindowFocusCallback(m_Window, window_focus_callback);
@@ -162,14 +162,20 @@ namespace unify::core {
 		glfwSetMouseButtonCallback(m_Window, mouse_button_callback);
 		glfwSetScrollCallback(m_Window, scroll_callback);
 
-		shader = std::make_shared<graphics::opengl::Shader>("shaders/vertexShader.glsl", "shaders/fragmentShader.glsl");
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+		shader = std::make_shared<graphics::opengl::Shader>("res/shaders/vertexShader.glsl", "res/shaders/fragmentShader.glsl");
+		texture = std::make_shared<graphics::opengl::Texture>("res/textures/UnifyLogo.png");
+
 		vArray = std::make_shared<graphics::opengl::VertexArray>();
 		vBuffer = std::make_shared<graphics::opengl::VertexBuffer>(vertices, sizeof(vertices));
 		vLayout = std::make_shared<graphics::opengl::VertexBufferLayout>();
 		eBuffer = std::make_shared<graphics::opengl::ElementBuffer>(indices, sizeof(indices));
 
 
-		vLayout->Push<GLfloat>(3);
+		vLayout->Push<GLfloat>(2);
+		vLayout->Push<GLfloat>(2);
 		vArray->AddBuffer(*vBuffer, *vLayout);
 
 		shader->Unbind();
@@ -197,6 +203,9 @@ namespace unify::core {
 
 		shader->Bind();
 		shader->SetUniform4f("uColor", r, g, b, 1.0f);
+
+		texture->Bind();
+		shader->SetUniform1i("uTexture", 0);
 
 		glClearColor(0.07f, .13f, 0.17f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
