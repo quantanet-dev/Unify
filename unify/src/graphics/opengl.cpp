@@ -109,6 +109,11 @@ namespace unify::graphics::opengl {
 		glUniform4f(location, v0, v1, v2, v3);
 	}
 
+	void Shader::SetUniformMat4f(const char* uniformName, const glm::mat4& matrix) {
+		GLuint location = GetUniformLocation(uniformName);
+		glUniformMatrix4fv(location, 1, GL_FALSE, &matrix[0][0]);
+	}
+
 	GLint Shader::GetUniformLocation(const char*& uniformName) {
 		GLint location = glGetUniformLocation(m_RendererID, uniformName);
 		if (location == -1) {

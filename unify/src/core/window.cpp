@@ -6,6 +6,8 @@
 #include "GLFW/glfw3.h"
 //#include "graphics/opengl.h"
 #include "core/renderer.h"
+#include "glm/glm.hpp"
+#include "glm/gtc/matrix_transform.hpp"
 
 namespace unify::core {
 
@@ -137,7 +139,7 @@ namespace unify::core {
 		glfwWindowHint(GLFW_DOUBLEBUFFER, GLFW_TRUE);
 		glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
 
-		m_Window = glfwCreateWindow(800, 800, "Unify Engine", NULL, NULL);
+		m_Window = glfwCreateWindow(1280, 720, "Unify Engine", NULL, NULL);
 		glfwMakeContextCurrent(m_Window);
 
 		glfwSwapInterval(1);
@@ -150,8 +152,8 @@ namespace unify::core {
 			LOG_INFO("Loaded OpenGL {}.{}", GLAD_VERSION_MAJOR(version), GLAD_VERSION_MINOR(version));
 		}
 
-		glfwSetWindowSizeLimits(m_Window, 800, 800, GLFW_DONT_CARE, GLFW_DONT_CARE);
-		/*glfwSetWindowAspectRatio(m_Window, 4, 3);*/
+		glfwSetWindowSizeLimits(m_Window, 1280, 720, GLFW_DONT_CARE, GLFW_DONT_CARE);
+		glfwSetWindowAspectRatio(m_Window, 16, 9);
 		glfwSetFramebufferSizeCallback(m_Window, framebuffer_size_callback);
 		glfwSetWindowPosCallback(m_Window, window_pos_callback);
 		glfwSetWindowFocusCallback(m_Window, window_focus_callback);
@@ -182,16 +184,16 @@ namespace unify::core {
 		vArray->Unbind();
 		vBuffer->Unbind();
 		eBuffer->Unbind();
-		
+
 	}
 
 	static float r = 0.0f;
 	static float g = 0.0f;
 	static float b = 0.0f;
 
-	static float rinc = 0.05f;
-	static float binc = 0.10f;
-	static float ginc = 0.15f;
+	static float rinc = 0.01f;
+	static float binc = 0.01f;
+	static float ginc = 0.01f;
 
 	void WindowManager::Update() {
 		
@@ -201,30 +203,34 @@ namespace unify::core {
 				});
 		}
 
+		glm::mat4 proj = glm::ortho(-2.0f, 2.0f, -1.125f, 1.125f);
+
 		shader->Bind();
 		shader->SetUniform4f("uColor", r, g, b, 1.0f);
+		shader->SetUniformMat4f("uMVP", proj);
 
 		texture->Bind();
 		shader->SetUniform1i("uTexture", 0);
+
 
 		glClearColor(0.07f, .13f, 0.17f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		core::RenderManager::GetInstance().Draw(*vArray, *eBuffer, *shader);
 
 		if (r > 1.f)
-			rinc = -0.05f;
+			rinc = -0.01f;
 		else if (r < 0.0f)
-			rinc = 0.05f;
+			rinc = 0.01f;
 
 		if (g > 1.f)
-			ginc = -0.10f;
+			ginc = -0.01f;
 		else if (g < 0.0f)
-			ginc = 0.10f;
+			ginc = 0.01f;
 
 		if (b > 1.f)
-			binc = -0.15f;
+			binc = -0.01f;
 		else if (b < 0.0f)
-			binc = 0.15f;
+			binc = 0.01f;
 
 		r += rinc;
 		g += ginc;

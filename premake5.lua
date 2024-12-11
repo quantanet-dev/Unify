@@ -51,7 +51,8 @@ project "unify"
         "%{prj.name}/vendor/spdlog/include",
         "%{prj.name}/vendor/glfw/include",
         "%{prj.name}/vendor/glad/include",
-        "%{prj.name}/vendor/stb_image/include"
+        "%{prj.name}/vendor/stb_image/include",
+        "%{prj.name}/vendor/glm/"
     }
     
     flags {

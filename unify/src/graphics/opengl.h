@@ -2,6 +2,7 @@
 #include "pch/un2pch.h"
 
 #include "glad/gl.h"
+#include "glm/glm.hpp"
 
 namespace unify::graphics::opengl {
 
@@ -21,6 +22,7 @@ namespace unify::graphics::opengl {
 
 		void SetUniform1i(const char* uniformName, int v0);
 		void SetUniform4f(const char* uniformName, float v0, float v1, float v2, float v3);
+		void SetUniformMat4f(const char* uniformName, const glm::mat4& matrix);
 	private:
 		std::string ReadFile(const char* filepath);
 		GLuint CompileShader(const char* vertexShaderFilepath, const char* fragmentShaderFilepath);
