@@ -13,6 +13,8 @@ namespace unify::core {
 
 	bool m_MouseInWindow = false;
 	static GLFWwindow* m_Window;
+	static int screenWidth = 1280;
+	static int screenHeight = 720;
 
 	void cursor_enter_callback(GLFWwindow* window, int entered) {
 		(entered) ? m_MouseInWindow = true : m_MouseInWindow = false;
@@ -22,14 +24,14 @@ namespace unify::core {
 		if (m_MouseInWindow) {
 			Event::CreateNewEvent(EventType::MouseMoved, [xpos, ypos]() {
 				//LOG_TRACE("Mouse Moved! {}, {}", xpos, ypos)
-			});
+				});
 		}
 	}
 
 	void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
 		Event::CreateNewEvent(EventType::MouseScrolled, [xoffset, yoffset]() {
 			//LOG_TRACE("Mouse Scrolled! {}, {}", xoffset, yoffset)
-		});
+			});
 	}
 
 	void mouse_button_callback(GLFWwindow* window, int button, int action, int mods) {
@@ -37,12 +39,12 @@ namespace unify::core {
 		case GLFW_PRESS:
 			Event::CreateNewEvent(EventType::MouseMoved, [button]() {
 				//LOG_TRACE("Mouse Button Pressed! {}", button)
-			});
+				});
 			break;
 		case GLFW_RELEASE:
 			Event::CreateNewEvent(EventType::MouseMoved, [button]() {
 				//LOG_TRACE("Mouse Button Released! {}", button)
-			});
+				});
 			break;
 		default:
 			break;
@@ -55,12 +57,12 @@ namespace unify::core {
 		case GLFW_PRESS:
 			Event::CreateNewEvent(EventType::KeyPressed, [key, scancode]() {
 				//LOG_TRACE("Key Pressed! {}, {}", key, scancode)
-			});
+				});
 			break;
 		case GLFW_RELEASE:
 			Event::CreateNewEvent(EventType::KeyReleased, [key, scancode]() {
 				//LOG_TRACE("Key Released! {}, {}", key, scancode)
-			});
+				});
 			break;
 		default:
 			break;
@@ -70,7 +72,7 @@ namespace unify::core {
 	void window_pos_callback(GLFWwindow* window, int xpos, int ypos) {
 		Event::CreateNewEvent(EventType::WindowMove, [xpos, ypos]() {
 			//LOG_TRACE("Window Moved! {}, {}", xpos, ypos)
-		});
+			});
 	}
 
 	void window_focus_callback(GLFWwindow* window, int focused) {
@@ -78,20 +80,22 @@ namespace unify::core {
 		{
 			Event::CreateNewEvent(EventType::WindowFocus, []() {
 				//LOG_TRACE("Window Focused!")
-			});
+				});
 		}
 		else
 		{
 			Event::CreateNewEvent(EventType::WindowUnfocus, []() {
 				//LOG_TRACE("Window Unfocused!")
-			});
+				});
 		}
 	}
 
 	void window_size_callback(GLFWwindow* window, int width, int height) {
+		screenWidth = width;
+		screenHeight = height;
 		Event::CreateNewEvent(EventType::WindowResize, [width, height]() {
 			//LOG_TRACE("Window Resized! {}, {}", width, height)
-		});
+			});
 	}
 
 	void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
@@ -105,11 +109,10 @@ namespace unify::core {
 
 	GLfloat vertices[] =
 	{
-	   -0.5f, -0.5f, 0.0f, 0.0f, // 0
-		0.5f, -0.5f, 1.0f, 0.0f, // 1
-		0.5f,  0.5f, 1.0f, 1.0f, // 2
-	   -0.5f,  0.5f, 0.0f, 1.0f // 3
-
+		100.0f, 100.0f, 0.0f, 0.0f, // 0
+		200.0f, 100.0f, 1.0f, 0.0f, // 1
+		200.0f, 200.0f, 1.0f, 1.0f, // 2
+		100.0f, 200.0f, 0.0f, 1.0f // 3
 	};
 
 	// Indices for vertices order
@@ -126,6 +129,7 @@ namespace unify::core {
 	std::shared_ptr<graphics::opengl::VertexBufferLayout> vLayout;
 	std::shared_ptr<graphics::opengl::ElementBuffer> eBuffer;
 
+
 	void WindowManager::Initialize() {
 
 		glfwInit();
@@ -137,7 +141,7 @@ namespace unify::core {
 #endif
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 		glfwWindowHint(GLFW_DOUBLEBUFFER, GLFW_TRUE);
-		glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
+		glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
 
 		m_Window = glfwCreateWindow(1280, 720, "Unify Engine", NULL, NULL);
 		glfwMakeContextCurrent(m_Window);
@@ -152,7 +156,7 @@ namespace unify::core {
 			LOG_INFO("Loaded OpenGL {}.{}", GLAD_VERSION_MAJOR(version), GLAD_VERSION_MINOR(version));
 		}
 
-		glfwSetWindowSizeLimits(m_Window, 1280, 720, GLFW_DONT_CARE, GLFW_DONT_CARE);
+		glfwSetWindowSizeLimits(m_Window, 1280 / 4, 720 / 4, GLFW_DONT_CARE, GLFW_DONT_CARE);
 		glfwSetWindowAspectRatio(m_Window, 16, 9);
 		glfwSetFramebufferSizeCallback(m_Window, framebuffer_size_callback);
 		glfwSetWindowPosCallback(m_Window, window_pos_callback);
@@ -195,19 +199,24 @@ namespace unify::core {
 	static float binc = 0.01f;
 	static float ginc = 0.01f;
 
+	glm::mat4 proj = glm::ortho(0.0f, (float)screenWidth, 0.0f, (float)screenHeight);
+	glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(-100, 0, 0));
+	glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(200, 200, 0));
+
+	glm::mat4 mvp = proj * view * model;
+
 	void WindowManager::Update() {
-		
+
 		if (glfwWindowShouldClose(m_Window)) {
 			Event::CreateNewEvent(EventType::WindowClose, []() {
 				Engine::GetInstance().Shutdown();
 				});
 		}
 
-		glm::mat4 proj = glm::ortho(-2.0f, 2.0f, -1.125f, 1.125f);
 
-		shader->Bind();
+		// shader->Bind();
 		shader->SetUniform4f("uColor", r, g, b, 1.0f);
-		shader->SetUniformMat4f("uMVP", proj);
+		shader->SetUniformMat4f("uMVP", mvp);
 
 		texture->Bind();
 		shader->SetUniform1i("uTexture", 0);
@@ -239,7 +248,7 @@ namespace unify::core {
 		glfwSwapBuffers(m_Window);
 		glfwPollEvents();
 
-		
+
 	}
 
 	void WindowManager::Shutdown() {
